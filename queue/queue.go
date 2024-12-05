@@ -1,16 +1,17 @@
 package queue
 
-type Queue struct {
-	items []int
+type Queue[T any] struct {
+	items []T
 }
 
-func (q *Queue) Enqueue(item int) {
+func (q *Queue[T]) Enqueue(item T) {
 	q.items = append(q.items, item)
 }
 
-func (q *Queue) Dequeue() int {
+func (q *Queue[T]) Dequeue() T {
 	if len(q.items) < 1 {
-		return -1 // returns -1 if the queue is empty
+		var result T
+		return result // returns -1 if the queue is empty
 	}
 	item := q.items[0]
 	q.items = q.items[1:]
