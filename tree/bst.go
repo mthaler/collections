@@ -37,3 +37,31 @@ func (n *Node[T]) insert(data T) {
 		}
 	}
 }
+
+func (t *Tree[T]) traversePreOrder() []T {
+	return t.root.traversePreOrder()
+}
+
+func (n *Node[T]) traversePreOrder() []T {
+	if n == nil {
+		return make([]T, 0)
+	} else {
+		result := make([]T, 0)
+		result = append(result, n.key)
+		result = append(result, n.left.traversePreOrder()...)
+		result = append(result, n.right.traversePreOrder()...)
+		return result
+	}
+}
+
+func (n *Node[T]) traversePostOrder() []T {
+	if n == nil {
+		return make([]T, 0)
+	} else {
+		result := make([]T, 0)
+		result = append(result, n.left.traversePostOrder()...)
+		result = append(result, n.right.traversePostOrder()...)
+		result = append(result, n.key)
+		return result
+	}
+}
