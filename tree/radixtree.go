@@ -4,6 +4,7 @@ import (
 	"collections/queue"
 	"fmt"
 	"strings"
+	"unicode/utf8"
 )
 
 type node struct {
@@ -133,11 +134,12 @@ func (r *RadixTree) KeysWithPrefix(prefix string) []string {
 	return results
 }
 
-func collect(x *node, prefix []rune, results queue.Queue[int]) {
+func collect(x *node, prefix string, pattern string, results queue.Queue[int]) {
 
 	if x == nil {
 		return
 	}
+	d := utf8.RuneCountInString(prefix)
 	if x.value != nil {
 		results.Enqueue()
 	}
