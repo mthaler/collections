@@ -1,6 +1,7 @@
 package tree
 
 import (
+	"collections/queue"
 	"fmt"
 	"strings"
 )
@@ -26,16 +27,19 @@ type RadixTree struct {
 
 // Returns the value associated with the given key if the radix tree contains the key or nil.
 func (r *RadixTree) Get(key string) interface{} {
+
 	x := get(r.root, key, 0)
 	return x
 }
 
 // Returns a boolean indicating if the radix tree contains the given key.
 func (r *RadixTree) Contains(key string) bool {
+
 	return r.Get(key) != nil
 }
 
 func get(x *node, key string, d int) *node {
+
 	if d == len(key) {
 		return x
 	}
@@ -45,6 +49,7 @@ func get(x *node, key string, d int) *node {
 
 // Adds the given key and value to the radix tree, overwriting the old value with the new value if the radix tree already contains the key.
 func (r *RadixTree) Put(key string, value interface{}) {
+
 	if value == nil {
 		r.Delete(key)
 	}
@@ -52,6 +57,7 @@ func (r *RadixTree) Put(key string, value interface{}) {
 }
 
 func (r *RadixTree) put(x *node, key string, value interface{}, d int) *node {
+
 	if x == nil {
 		x = createNode()
 	}
@@ -79,10 +85,12 @@ func (r *RadixTree) IsEmpty() bool {
 
 // Removes the key from the radix tree if the key is present.
 func (r *RadixTree) Delete(key string) {
+
 	r.root = r.delete(r.root, key, 0)
 }
 
 func (r *RadixTree) delete(x *node, key string, d int) *node {
+
 	if x == nil {
 		return nil
 	}
@@ -90,7 +98,7 @@ func (r *RadixTree) delete(x *node, key string, d int) *node {
 		if x.value != nil {
 			r.n--
 		}
-		x.value = nil
+		x.value = nilstring
 	} else {
 		c := key[d]
 		x.next[c] = r.delete(x.next[c], key, d-1)
@@ -110,21 +118,41 @@ func (r *RadixTree) delete(x *node, key string, d int) *node {
 
 // Returns all keys of the radix tree.
 func (r *RadixTree) Keys() []string {
+
 	return r.KeysWithPrefix("")
 }
 
 // Returns all keys of the radix tree that start with the given prefix.
 func (r *RadixTree) KeysWithPrefix(prefix string) []string {
+
 	results := make([]string, 0)
+
 	x := get(r.root, prefix, 0)
 	b := []rune(prefix)
 	results = collect(x, b, results)
 	return results
 }
 
+func collect(x *node, prefix []rune, results queue.Queue[int]) {
+
+	if x == nil {
+		return
+	}
+	if x.value != nil {
+		results.Enqueue()
+	}
+	for c := 0; c < R; c++ {
+		prefix = append(prefix, rune(c))
+		results = collect(x.next[c], prefix, results)
+		prefix = deleteCharAt(prefix, len(prefix)-1)
+	}
+	return results
+}
+
 // Returns all of the keys of the radix tree that match the given pattern,
 // where . symbol is treated as wildcard character that matches any single character.
 func (r *RadixTree) KeysThatMatch(pattern string) []string {
+
 	results := make([]string, 0)
 
 	b := make([]rune, 0)
@@ -133,12 +161,14 @@ func (r *RadixTree) KeysThatMatch(pattern string) []string {
 }
 
 func collectPattern(x *node, prefix []rune, pattern []rune, results []string) []string {
+
 	if x == nil {
 		return results
 	}
 	d := len(prefix)
 	if d == len(pattern) && x.value != nil {
-		results = enqueue(results, makeString(prefix))
+		results = enqueue(results, string(prefix))
+
 	}
 	if d == len(pattern) {
 		return results
@@ -159,13 +189,16 @@ func collectPattern(x *node, prefix []rune, pattern []rune, results []string) []
 }
 
 // Returns the string in the symbol table that is the longest prefix of the given query.
+
 func (r *RadixTree) LongestPrefixOf(query string) string {
+
 	q := []rune(query)
 	length := longestPrefixOf(r.root, q, 0, -1)
 	if length == -1 {
 		return ""
 	} else {
 		return string(q[:length])
+
 	}
 }
 
@@ -186,11 +219,14 @@ func longestPrefixOf(x *node, query []rune, d int, length int) int {
 // Prints the structure of the radix tree
 func (r *RadixTree) PrintStructure() {
 	var b strings.Builder
+
 	printStructure(r.root, 0, &b)
 	fmt.Println(b.String())
+
 }
 
 func printStructure(x *node, d int, b *strings.Builder) {
+
 	runes := make([]rune, 0)
 	children := make([]*node, 0)
 	for c := 0; c < R; c++ {
@@ -206,7 +242,9 @@ func printStructure(x *node, d int, b *strings.Builder) {
 	} else if l > 1 {
 		for i, r := range runes {
 			b.WriteString("\n")
+
 			b.WriteString(ws(d))
+
 			b.WriteRune(r)
 			child := children[i]
 			printStructure(child, d+1, b)
@@ -215,11 +253,9 @@ func printStructure(x *node, d int, b *strings.Builder) {
 }
 
 func ws(count int) string {
-	return strings.Repeat(" ", count)
-}
 
-func makeString(s []rune) string {
-	return string(s)
+	return strings.Repeat(" ", count)
+
 }
 
 func deleteCharAt(prefix []rune, index int) []rune {
