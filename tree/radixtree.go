@@ -122,21 +122,6 @@ func (r *RadixTree) KeysWithPrefix(prefix string) []string {
 	return results
 }
 
-func collect(x *node, prefix []rune, results []string) []string {
-	if x == nil {
-		return results
-	}
-	if x.value != nil {
-		results = enqueue(results, makeString(prefix))
-	}
-	for c := 0; c < R; c++ {
-		prefix = append(prefix, rune(c))
-		results = collect(x.next[c], prefix, results)
-		prefix = deleteCharAt(prefix, len(prefix)-1)
-	}
-	return results
-}
-
 // Returns all of the keys of the radix tree that match the given pattern,
 // where . symbol is treated as wildcard character that matches any single character.
 func (r *RadixTree) KeysThatMatch(pattern string) []string {
@@ -231,4 +216,16 @@ func printStructure(x *node, d int, b *strings.Builder) {
 
 func ws(count int) string {
 	return strings.Repeat(" ", count)
+}
+
+func makeString(s []rune) string {
+	return string(s)
+}
+
+func deleteCharAt(prefix []rune, index int) []rune {
+	if index < 0 || len(prefix)-1 > index {
+		return prefix
+	} else {
+		return append(prefix[0:index], prefix[index+1:]...)
+	}
 }
