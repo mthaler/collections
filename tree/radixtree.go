@@ -1,5 +1,10 @@
 package tree
 
+import (
+	"fmt"
+	"strings"
+)
+
 type node struct {
 	value interface{} // value of the node or nil if there is no value
 	next  []*node     // array of pointers to the next node
@@ -15,7 +20,7 @@ func createNode() *node {
 
 type RadixTree struct {
 	root *node // root of trie
-	n    int // number of keys in trie
+	n    int   // number of keys in trie
 
 }
 
@@ -77,9 +82,6 @@ func (r *RadixTree) Delete(key string) {
 	r.root = r.delete(r.root, key, 0)
 }
 
-
-}
-
 func (r *RadixTree) delete(x *node, key string, d int) *node {
 	if x == nil {
 		return nil
@@ -106,12 +108,9 @@ func (r *RadixTree) delete(x *node, key string, d int) *node {
 	return nil
 }
 
-
 // Returns all keys of the radix tree.
 func (r *RadixTree) Keys() []string {
 	return r.KeysWithPrefix("")
-}
-
 }
 
 // Returns all keys of the radix tree that start with the given prefix.
@@ -137,7 +136,6 @@ func collect(x *node, prefix []rune, results []string) []string {
 	}
 	return results
 }
-
 
 // Returns all of the keys of the radix tree that match the given pattern,
 // where . symbol is treated as wildcard character that matches any single character.
@@ -175,7 +173,6 @@ func collectPattern(x *node, prefix []rune, pattern []rune, results []string) []
 	return results
 }
 
-
 // Returns the string in the symbol table that is the longest prefix of the given query.
 func (r *RadixTree) LongestPrefixOf(query string) string {
 	q := []rune(query)
@@ -207,7 +204,6 @@ func (r *RadixTree) PrintStructure() {
 	printStructure(r.root, 0, &b)
 	fmt.Println(b.String())
 }
-
 
 func printStructure(x *node, d int, b *strings.Builder) {
 	runes := make([]rune, 0)
