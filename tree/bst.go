@@ -38,7 +38,7 @@ func (n *Node[T]) insert(data T) {
 	}
 }
 
-func (t *Tree[T]) traversePreOrder() []T {
+func (t *Tree[T]) TraversePreOrder() []T {
 	return t.root.traversePreOrder()
 }
 
@@ -52,6 +52,10 @@ func (n *Node[T]) traversePreOrder() []T {
 		result = append(result, n.right.traversePreOrder()...)
 		return result
 	}
+}
+
+func (t *Tree[T]) TraversePostOrder() []T {
+	return t.root.traversePostOrder()
 }
 
 func (n *Node[T]) traversePostOrder() []T {
