@@ -28,23 +28,26 @@ type RadixTree struct {
 
 // Returns the value associated with the given key if the radix tree contains the key or nil.
 func (r *RadixTree) Get(key string) interface{} {
-
 	x := get(r.root, key, 0)
 	return x
 }
 
 // Returns a boolean indicating if the radix tree contains the given key.
 func (r *RadixTree) Contains(key string) bool {
-
 	return r.Get(key) != nil
 }
 
 func get(x *node, key string, d int) *node {
-
-	if d == len(key) {
+	if x == nil {
+		return nil
+	}
+	if d < 0 || d > utf8.RuneCountInString(key) {
+		return nil
+	}
+	if d == utf8.RuneCountInString(key) {
 		return x
 	}
-	c := key[d]
+	c := []rune(key)[d]
 	return get(x.next[c], key, d+1)
 }
 
