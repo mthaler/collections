@@ -95,3 +95,13 @@ func (list *LinkedList[T]) FindNodeAt(index int) *Node[T] {
 	}
 	return current
 }
+
+func (list *LinkedList[T]) ToSlice() []T {
+	var result []T = make([]T, 0)
+	var current *Node[T] = list.head
+	for current != nil {
+		result = append(result, current.data)
+		current = current.next
+	}
+	return result
+}
