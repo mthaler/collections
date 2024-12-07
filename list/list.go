@@ -9,7 +9,7 @@ type LinkedList[T any] struct {
 	head *Node[T]
 }
 
-func (list *LinkedList[T]) insertAtBack(data T) {
+func (list *LinkedList[T]) Append(data T) {
 	newNode := &Node[T]{data: data, next: nil}
 
 	if list.head == nil {
