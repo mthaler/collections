@@ -105,3 +105,21 @@ func (list *LinkedList[T]) ToSlice() []T {
 	}
 	return result
 }
+
+func NewList[T any](values ...T) LinkedList[T] {
+	if len(values) == 0 {
+		return LinkedList[T]{}
+	}
+	current := &Node[T]{data: values[0]}
+	result := LinkedList[T]{head: current}
+	for i, v := range values {
+		if i == 0 {
+			// do nothing
+		} else {
+			n := &Node[T]{data: v}
+			current.next = n
+			current = n
+		}
+	}
+	return result
+}
