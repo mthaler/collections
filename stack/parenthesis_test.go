@@ -1,6 +1,10 @@
 package stack
 
-func checkBalance(exp string) bool {
+import (
+	"testing"
+)
+
+func isBalanced(exp string) bool {
 	s := Stack[string]{}
 	for _, c := range exp {
 		if c == '(' || c == '{' || c == '[' {
@@ -18,5 +22,11 @@ func checkBalance(exp string) bool {
 		}
 	}
 
-	return false
+	return s.IsEmpty()
+}
+
+func TestIsBalanced(t *testing.T) {
+	if !isBalanced("{(a*b) + (c*d)}") {
+		t.Errorf("isBalanced should result in true")
+	}
 }
