@@ -24,6 +24,10 @@ func (s *Stack[T]) IsEmpty() bool {
 	return len(s.items) == 0
 }
 
+func (s *Stack[T]) Size() int {
+	return len(s.items)
+}
+
 func (s *Stack[T]) Top() (T, error) {
 	if s.IsEmpty() {
 		var result T
