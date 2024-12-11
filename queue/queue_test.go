@@ -7,6 +7,6 @@ func TestQueue(t *testing.T) {
 	q.Enqueue(1)
 	var result = q.Dequeue()
 	if result != 1 {
-		t.Errorf("q.Dequeue() = %d, expeczed %d", result, 1)
+		t.Errorf("q.Dequeue() = %d, expected %d", result, 1)
 	}
 }
