@@ -22,6 +22,6 @@ func (s *Stack[T]) IsEmpy() bool {
 	return len(s.items) == 0
 }
 
-func (s *Stack[T]) ToSliice() []T {
+func (s *Stack[T]) ToSlice() []T {
 	return s.items
 }

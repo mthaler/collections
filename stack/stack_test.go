@@ -16,6 +16,18 @@ func TestIsEmpty(t *testing.T) {
 	}
 }
 
+func TestPush(t *testing.T) {
+	var s Stack[int]
+	s.Push(1)
+	s.Push(2)
+	s.Push(3)
+	expected := []int{1, 2, 3}
+	result := s.ToSlice()
+	if !reflect.DeepEqual(result, expected) {
+		t.Errorf("s = %v, expected %v", s, expected)
+	}
+}
+
 func TestToSlice(t *testing.T) {
 	var s Stack[int]
 	s.Push(1)
