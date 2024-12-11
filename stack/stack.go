@@ -21,3 +21,7 @@ func (s *Stack[T]) Pop() T {
 func (s *Stack[T]) IsEmpy() bool {
 	return len(s.items) == 0
 }
+
+func (s *Stack[T]) ToSliice() []T {
+	return s.items
+}
