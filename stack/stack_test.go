@@ -16,6 +16,16 @@ func TestIsEmpty(t *testing.T) {
 	}
 }
 
+func TestSize(t *testing.T) {
+	var s Stack[int]
+	s.Push(1)
+	s.Push(2)
+	s.Push(3)
+	if s.Size() != 3 {
+		t.Errorf("s.Size() = %d, expected %d", s.Size(), 3)
+	}
+}
+
 func TestPush(t *testing.T) {
 	var s Stack[int]
 	s.Push(1)
