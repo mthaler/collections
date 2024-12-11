@@ -7,11 +7,11 @@ import (
 
 func TestIsEmpty(t *testing.T) {
 	var s Stack[int]
-	if !s.IsEmpy() {
+	if !s.IsEmpty() {
 		t.Errorf("Stack should be empty")
 	}
 	s.Push(1)
-	if s.IsEmpy() {
+	if s.IsEmpty() {
 		t.Errorf("Stack should be empty")
 	}
 }
