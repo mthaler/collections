@@ -7,18 +7,22 @@ import (
 
 func isBalanced(exp string) bool {
 	fmt.Printf("%v", exp)
-	s := Stack[string]{}
+	s := Stack[rune]{}
 	for _, c := range exp {
 		if c == '(' || c == '{' || c == '[' {
-			s.Push(string(c))
+			fmt.Printf("Pushed %s", string(c))
+			s.Push(c)
 		} else {
 			t, _ := s.Top()
 			if !s.IsEmpty() &&
-				((t == "(" && c == ')') ||
-					(t == "{" && c == '}') ||
-					(t == "[" && c == ']')) {
-				s.Pop()
+				((t == '(' && c == ')') ||
+					(t == '{' && c == '}') ||
+					(t == '[' && c == ']')) {
+				r := s.Pop()
+				fmt.Printf("popped: %s", string(r))
 			} else {
+				t, _ := s.Top()
+				fmt.Printf("popped: %s", string(t))
 				return false // Unmatched closing bracket
 			}
 		}

@@ -6,8 +6,8 @@ type Stack[T any] struct {
 	items []T
 }
 
-func (s *Stack[T]) Push(dara T) {
-	s.items = append(s.items, dara)
+func (s *Stack[T]) Push(data T) {
+	s.items = append(s.items, data)
 }
 
 func (s *Stack[T]) Pop() T {

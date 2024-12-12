@@ -34,7 +34,15 @@ func TestPush(t *testing.T) {
 	expected := []int{1, 2, 3}
 	result := s.ToSlice()
 	if !reflect.DeepEqual(result, expected) {
-		t.Errorf("s = %v, expected %v", s, expected)
+		t.Errorf("s.ToSlice() = %v, expected %v", result, expected)
+	}
+	var s2 Stack[rune]
+	s2.Push('{')
+	s2.Push('(')
+	expected2 := []int{'{', '('}
+	result2 := s2.ToSlice()
+	if !reflect.DeepEqual(result2, expected2) {
+		t.Errorf("s2.ToSlice() = %v, expected %v", result2, expected2)
 	}
 }
 
