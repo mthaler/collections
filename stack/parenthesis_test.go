@@ -1,29 +1,40 @@
 package stack
 
 import (
-	"fmt"
 	"testing"
 )
 
 func isBalanced(exp string) bool {
-	fmt.Printf("%v", exp)
-	s := Stack[rune]{}
-	for _, c := range exp {
-		if c == '(' || c == '{' || c == '[' {
-			fmt.Printf("Pushed %s", string(c))
-			s.Push(c)
-		} else {
-			t, _ := s.Top()
-			if !s.IsEmpty() &&
-				((t == '(' && c == ')') ||
-					(t == '{' && c == '}') ||
-					(t == '[' && c == ']')) {
-				r := s.Pop()
-				fmt.Printf("popped: %s", string(r))
+	s := Stack[string]{}
+
+	for _, char := range exp {
+		switch char {
+		case '(':
+			s.Push(string(char))
+		case '{':
+			s.Push(string(char))
+		case '[':
+			s.Push(string(char))
+		case ')':
+			top, _ := s.Top()
+			if top == "(" {
+				s.Pop()
 			} else {
-				t, _ := s.Top()
-				fmt.Printf("popped: %s", string(t))
-				return false // Unmatched closing bracket
+				return false
+			}
+		case '}':
+			top, _ := s.Top()
+			if top == "{" {
+				s.Pop()
+			} else {
+				return false
+			}
+		case ']':
+			top, _ := s.Top()
+			if top == "[" {
+				s.Pop()
+			} else {
+				return false
 			}
 		}
 	}
@@ -32,8 +43,10 @@ func isBalanced(exp string) bool {
 }
 
 func TestIsBalanced(t *testing.T) {
-	isBalanced("{(a*b) + (c*d)}")
-	//if !isBalanced("{(a*b) + (c*d)}") {
-	//	t.Errorf("isBalanced should result in true")
-	//}
+	if !isBalanced("{(a*b) + (c*d)}") {
+		t.Errorf("isBalanced should result in true")
+	}
+	if isBalanced("(a+b") {
+		t.Errorf("isBalanced should result in false")
+	}
 }
