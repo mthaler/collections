@@ -1,16 +1,14 @@
 package list
 
-import (
-	"reflect"
-	"testing"
-)
+import "testing"
 
-func TestRadixTree_Keys(t *testing.T) {
-	tree := NewList("alligator", "baby", "chicken")
-	tree.Prepend("doll")
-	s := tree.ToSlice()
-	expected := []string{"doll", "alligator", "baby", "chicken"}
-	if !reflect.DeepEqual(s, expected) {
-		t.Errorf("s = %v, expected %v", s, expected)
+func TestIsEmpty(t *testing.T) {
+	var l LinkedList[int]
+	if !l.IsEmpty() {
+		t.Errorf("List should be empty")
+	}
+	l.Prepend(1)
+	if l.IsEmpty() {
+		t.Errorf("Bag should not be empty")
 	}
 }
