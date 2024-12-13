@@ -11,6 +11,10 @@ type LinkedList[T any] struct {
 	head *Node[T]
 }
 
+func (l *LinkedList[T]) IsEmpty() bool {
+	return l.head == nil
+}
+
 func (list *LinkedList[T]) Append(data T) {
 	newNode := &Node[T]{data: data, next: nil}
 
