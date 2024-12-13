@@ -39,3 +39,16 @@ func TestAppend(t *testing.T) {
 		t.Errorf("l = %v, expected %v", result, expected)
 	}
 }
+
+func TestDeleteFront(t *testing.T) {
+	var l LinkedList[int]
+	l.Append(1)
+	l.Append(2)
+	l.Append(3)
+	l.DeleteFront()
+	expected := []int{2, 3}
+	result := l.ToSlice()
+	if !reflect.DeepEqual(result, expected) {
+		t.Errorf("l = %v, expected %v", result, expected)
+	}
+}
