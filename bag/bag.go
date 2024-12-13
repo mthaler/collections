@@ -39,5 +39,6 @@ func (b *Bag[T]) Add(t T) {
 	var first Node[T]
 	first.item = t
 	first.next = oldFirst
+	b.first = &first
 	b.n++
 }
