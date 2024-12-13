@@ -73,7 +73,7 @@ func (list *LinkedList[T]) DeleteFront() {
 	}
 }
 
-func (list *LinkedList[T]) DeleteLast() {
+func (list *LinkedList[T]) DeleteBack() {
 	if list.head == nil {
 		fmt.Printf("Linked list is empty\n")
 	}
@@ -91,16 +91,6 @@ func (list *LinkedList[T]) DeleteLast() {
 	current.next = nil
 
 	fmt.Printf("Last node of linked list has been deleted")
-}
-
-func (list *LinkedList[T]) CountNodes() int {
-	count := 0
-	current := list.head
-	for current != nil {
-		current = current.next
-		count++
-	}
-	return count
 }
 
 func (list *LinkedList[T]) FindNodeAt(index int) *Node[T] {
