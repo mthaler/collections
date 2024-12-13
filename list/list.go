@@ -8,38 +8,61 @@ type Node[T any] struct {
 }
 
 type LinkedList[T any] struct {
-	head *Node[T]
+	head *Node[T] // beginning of list
+	n    int      // number of elements in list
 }
 
 func (l *LinkedList[T]) IsEmpty() bool {
 	return l.head == nil
 }
 
-func (list *LinkedList[T]) Append(data T) {
+func (l *LinkedList[T]) Append(data T) {
 	newNode := &Node[T]{data: data, next: nil}
 
-	if list.head == nil {
-		list.head = newNode
+	if l.head == nil {
+		l.head = newNode
+		l.n++
 		return
 	}
 
-	current := list.head
+	current := l.head
 	for current.next != nil {
 		current = current.next
 	}
 
 	current.next = newNode
+	l.n++
 }
 
-func (list *LinkedList[T]) Prepend(data T) {
-	if list.head == nil {
+func (l *LinkedList[T]) Prepend(data T) {
+	if l.head == nil {
 		newNode := &Node[T]{data: data, next: nil}
-		list.head = newNode
+		l.head = newNode
+		l.n++
 		return
 	}
 
-	newNode := &Node[T]{data: data, next: list.head}
-	list.head = newNode
+	newNode := &Node[T]{data: data, next: l.head}
+	l.head = newNode
+	l.n++
+}
+
+func (l *LinkedList[T]) Insert(n int, data T) {
+	if n == 0 {
+		l.Prepend(data)
+	} else if n == l.n-1 {
+		l.Append(data)
+	} else {
+		temp1 := &Node[T]{data, nil}
+		temp2 := l.head
+
+		for i := 0; i < n-1; i++ {
+			temp2 = temp2.next
+		}
+		temp1.next = temp2.next
+		temp2.next = temp1
+		l.n++
+	}
 }
 
 func (list *LinkedList[T]) DeleteFront() {
