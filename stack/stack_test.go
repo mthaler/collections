@@ -3,17 +3,15 @@ package stack
 import (
 	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestIsEmpty(t *testing.T) {
 	var s Stack[int]
-	if !s.IsEmpty() {
-		t.Errorf("Stack should be empty")
-	}
+	assert.True(t, s.IsEmpty(), "Stack should be empty")
 	s.Push(1)
-	if s.IsEmpty() {
-		t.Errorf("Stack should be empty")
-	}
+	assert.False(t, s.IsEmpty(), "Stack should not be empty")
 }
 
 func TestSize(t *testing.T) {
