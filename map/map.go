@@ -27,6 +27,10 @@ private void resize(int chains) {
 	this.st = temp.st;
 }
 
+func (st *HashST[K, V]) hash(key K) {
+	return (key.hash & 0x7fffffff) % m;
+}
+
 // hash value between 0 and m-1
 private int hash(Key key) {
 	return (key.hashCode() & 0x7fffffff) % m;
