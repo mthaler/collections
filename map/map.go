@@ -2,6 +2,8 @@ package mymap
 
 import "errors"
 
+const INIT_CAPACITY = 4
+
 type Node struct {
 	Key   any
 	Value any
@@ -15,6 +17,7 @@ type HashST[K comparable, V any] struct {
 }
 
 func (st *HashST[K, V]) resize(chains int) {
+	var temp HashST[k, V]
 	HashST<Key, Value> temp = new HashST<Key, Value>(chains);
 	for (int i = 0; i < m; i++) {
 		for (Node x = st[i]; x != null; x = x.next) {
@@ -27,13 +30,8 @@ func (st *HashST[K, V]) resize(chains int) {
 	this.st = temp.st;
 }
 
-func (st *HashST[K, V]) hash(key K) {
+func (st *HashST[K, V]) hash(key K) int {
 	return (key.hash & 0x7fffffff) % m;
-}
-
-// hash value between 0 and m-1
-private int hash(Key key) {
-	return (key.hashCode() & 0x7fffffff) % m;
 }
 
 func (st *HashST[K, V]) Size() int {
@@ -81,4 +79,24 @@ func (st *HashST[K, V]) Remove(key K) {
 
 	// halve table size if average length of list <= 2
 	if (m > INIT_CAPACITY && n <= 2*m) resize(m/2);
+}
+
+private Node remove(Node x, Key key) {
+	if (x == null) return null;
+	if (key.equals(x.key)) {
+		n--;
+		return x.next;
+	}
+	x.next = remove(x.next, key);
+	return x;
+}
+
+func New() HashST[K, V] {
+	result := HashST[K, V]{m: INIT_CAPACITY}
+	return result
+}
+
+func NewWithChains(chains int) HashST[K, V] {
+	result := HashST[K, V]{m: chains}
+	return result
 }
