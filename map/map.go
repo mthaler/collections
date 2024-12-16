@@ -14,7 +14,7 @@ type HashST[K comparable, V any] struct {
 	st []Node // array of linked-list symbol tables
 }
 
-private void resize(int chains) {
+func (st *HashST[K, V]) resize(chains int) {
 	HashST<Key, Value> temp = new HashST<Key, Value>(chains);
 	for (int i = 0; i < m; i++) {
 		for (Node x = st[i]; x != null; x = x.next) {
