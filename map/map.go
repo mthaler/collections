@@ -48,7 +48,7 @@ func (st *HashST[K, V]) Contains(key K) (bool, error) {
 
 func (st *HashST[K, V]) Get(key K) (V, error) {
 	i := hash(key);
-	for (x Node = st[i]; x != null; x = x.next) {
+	for x := st[i]; x != null; x = x.next {
 		if key.equals(x.key) {
 			return V(x.Value), nil;			
 
