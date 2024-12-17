@@ -18,19 +18,19 @@ type HashST[K comparable, V any] struct {
 
 func (st *HashST[K, V]) resize(chains int) {
 	temp := NewWithChains(chains)
-	for i := 0; i < m; i++ {
-		for x := st[i]; x != null; x = x.next {
-			temp.Put((Key), x.Key, V(x.Value));
+	for i := 0; i < st.m; i++ {
+		for x := st.st[i]; x != null; x = x.next {
+			temp.Put((Key), x.Key, V(x.Value))
 		}
 	}
 
-	st.m  = temp.m
-	st.n  = temp.n
+	st.m = temp.m
+	st.n = temp.n
 	st.st = temp.st
 }
 
 func (st *HashST[K, V]) hash(key K) int {
-	return (key.hash & 0x7fffffff) % m;
+	return (key.hash & 0x7fffffff) % m
 }
 
 func (st *HashST[K, V]) Size() int {
@@ -47,10 +47,10 @@ func (st *HashST[K, V]) Contains(key K) (bool, error) {
 }
 
 func (st *HashST[K, V]) Get(key K) (V, error) {
-	i := hash(key);
+	i := hash(key)
 	for x := st[i]; x != null; x = x.next {
 		if key.equals(x.key) {
-			return V(x.Value), nil;			
+			return V(x.Value), nil
 
 		}
 	}
@@ -60,37 +60,37 @@ func (st *HashST[K, V]) Get(key K) (V, error) {
 
 func (st *HashST[K, V]) Put(key K, value V) {
 	if n >= 10*m {
-		st.resize(2*m)
+		st.resize(2 * m)
 	}
 
-	i := hash(key);NewWithChains
+	i := hash(key)
+	NewWithChains
 	for x := st[i]; x != null; x = x.next {
-		if (key.equals(x.key)) {
-			x.Value = val;
+		if key.equals(x.key) {
+			x.Value = val
 			return
 		}
 	}
-	n++;
-	st[i] = new Node(key, val, st[i]);
+	st.n++
+	st[i] = Node(key, val, st[i])
 }
 
 func (st *HashST[K, V]) Remove(key K) {
-	i := hash(key);
-	st.st[i] = remove(st.st[i], key);
-
+	i := hash(key)
+	st.st[i] = remove(st.st[i], key)
 
 	// halve table size if average length of list <= 2
 	if m > INIT_CAPACITY && n <= 2*m {
-		st.resize(m/2);
+		st.resize(m / 2)
 	}
 }
 
-func (n *Node) remove(key K) Node {
-	if (key.equals(x.key)) {
-		n--;
-		return x.next;
-		x.next = remove(x.next, key);
-		return x;
+func (st *HashST[K, V]) remove(x Node, key K) *Node {
+	if key.equals(x.Key) {
+		st.n--
+		return x.next
+		x.next = st.remove(x.next, key)
+		return x
 	}
 }
 
