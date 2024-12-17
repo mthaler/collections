@@ -53,14 +53,17 @@ func (st *HashST[K, V]) Get(key K) (V, error) {
 			return V(x.Value), nil;			
 
 		}
+	}
 	var v V
 	return v, errors.New("Key not found")
 }
 
 func (st *HashST[K, V]) Put(key K, value V) {
-	if (n >= 10*m) resize(2*m)
+	if n >= 10*m {
+		st.resize(2*m)
+	}
 
-	int i = hash(key);NewWithChains
+	i := hash(key);NewWithChains
 	for (Node x = st[i]; x != null; x = x.next) {
 		if (key.equals(x.key)) {
 			x.val = val;
@@ -77,7 +80,9 @@ func (st *HashST[K, V]) Remove(key K) {
 
 
 	// halve table size if average length of list <= 2
-	if (m > INIT_CAPACITY && n <= 2*m) resize(m/2);
+	if m > INIT_CAPACITY && n <= 2*m {
+		st.resize(m/2);
+	}
 }
 
 private Node remove(Node x, Key key) {
