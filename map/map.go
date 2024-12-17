@@ -64,10 +64,10 @@ func (st *HashST[K, V]) Put(key K, value V) {
 	}
 
 	i := hash(key);NewWithChains
-	for (Node x = st[i]; x != null; x = x.next) {
+	for x := st[i]; x != null; x = x.next {
 		if (key.equals(x.key)) {
-			x.val = val;
-			return;
+			x.Value = val;
+			return
 		}
 	}
 	n++;
@@ -85,14 +85,13 @@ func (st *HashST[K, V]) Remove(key K) {
 	}
 }
 
-private Node remove(Node x, Key key) {
-	if (x == null) return null;
+func (n *Node) remove(key K) Node {
 	if (key.equals(x.key)) {
 		n--;
 		return x.next;
+		x.next = remove(x.next, key);
+		return x;
 	}
-	x.next = remove(x.next, key);
-	return x;
 }
 
 func New() HashST[K, V] {
