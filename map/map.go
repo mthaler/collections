@@ -1,6 +1,10 @@
 package mymap
 
-import "errors"
+import (
+	"errors"
+
+	"github.com/mitchellh/hashstructure"
+)
 
 const INIT_CAPACITY = 4
 
@@ -30,7 +34,8 @@ func (st *HashST[K, V]) resize(chains int) {
 }
 
 func (st *HashST[K, V]) hash(key K) int {
-	return (key.hash & 0x7fffffff) % st.m
+	hash, err := hashstructure.Hash(key, hashstructure.FormatV2, nil)
+	return (hash & 0x7fffffff) % st.m
 }
 
 func (st *HashST[K, V]) Size() int {
