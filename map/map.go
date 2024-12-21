@@ -17,7 +17,7 @@ type HashST[K comparable, V any] struct {
 }
 
 func (st *HashST[K, V]) resize(chains int) {
-	temp := NewWithChains(chains)
+	temp := NewWithChains{K, V}(chains)
 	for i := 0; i < st.m; i++ {
 		for x := st.st[i]; x != nil; x = x.next {
 			temp.Put((Key), x.Key, V(x.Value))
@@ -47,8 +47,8 @@ func (st *HashST[K, V]) Contains(key K) (bool, error) {
 }
 
 func (st *HashST[K, V]) Get(key K) (V, error) {
-	i := hash(key)
-	for x := st[i]; x != null; x = x.next {
+	i := st.hash(key)
+	for x := st.st[i]; x != nil; x = x.next {
 		if key.equals(x.key) {
 			return V(x.Value), nil
 
