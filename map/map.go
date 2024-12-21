@@ -59,8 +59,8 @@ func (st *HashST[K, V]) Get(key K) (V, error) {
 }
 
 func (st *HashST[K, V]) Put(key K, value V) {
-	if n >= 10*m {
-		st.resize(2 * m)
+	if st.n >= 10*st.m {
+		st.resize(2 * st.m)
 	}
 
 	i := hash(key)
