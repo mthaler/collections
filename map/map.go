@@ -19,7 +19,7 @@ type HashST[K comparable, V any] struct {
 func (st *HashST[K, V]) resize(chains int) {
 	temp := NewWithChains(chains)
 	for i := 0; i < st.m; i++ {
-		for x := st.st[i]; x != null; x = x.next {
+		for x := st.st[i]; x != nil; x = x.next {
 			temp.Put((Key), x.Key, V(x.Value))
 		}
 	}
@@ -42,7 +42,7 @@ func (st *HashST[K, V]) IsEmpty() bool {
 }
 
 func (st *HashST[K, V]) Contains(key K) (bool, error) {
-	_, err = get(key)
+	_, err = st.Get(key)
 	return err == nil
 }
 
@@ -94,12 +94,12 @@ func (st *HashST[K, V]) remove(x Node, key K) *Node {
 	}
 }
 
-func New() HashST[K, V] {
+func New[K comparable, V any]() HashST[K, V] {
 	result := HashST[K, V]{m: INIT_CAPACITY}
 	return result
 }
 
-func NewWithChains(chains int) HashST[K, V] {
+func NewWithChains[K comparable, V any](chains int) HashST[K, V] {
 	result := HashST[K, V]{m: chains}
 	return result
 }
