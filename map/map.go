@@ -15,13 +15,13 @@ type Node struct {
 }
 
 type HashST[K comparable, V any] struct {
-	n  uint    // number of key-value pairs
-	m  uint    // number of chains
+	n  int     // number of key-value pairs
+	m  int     // number of chains
 	st []*Node // array of linked-list symbol tables
 }
 
 func (st *HashST[K, V]) resize(chains int) {
-	temp := NewWithChains{K, V}(chains)
+	temp := NewWithChains[K, V](chains)
 	for i := 0; i < st.m; i++ {
 		for x := st.st[i]; x != nil; x = x.next {
 			temp.Put(x.Key.(K), x.Value.(V))
@@ -38,7 +38,9 @@ func (st *HashST[K, V]) hash(key K) int {
 	if err != nil {
 		panic(err)
 	}
-	return (hash & 0x7fffffff) % st.m
+	m := uint64(st.m)
+	h := int((hash & 0x7fffffff) % m)
+	return h
 }
 
 func (st *HashST[K, V]) Size() int {
