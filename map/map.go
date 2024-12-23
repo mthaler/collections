@@ -60,7 +60,7 @@ func (st *HashST[K, V]) Get(key K) (V, error) {
 	i := st.hash(key)
 	for x := st.st[i]; x != nil; x = x.next {
 		if key == x.Key {
-			return V(x.Value), nil
+			return x.Value.(V), nil
 
 		}
 	}
@@ -73,7 +73,7 @@ func (st *HashST[K, V]) Put(key K, value V) {
 		st.resize(2 * st.m)
 	}
 
-	i := hash(key)
+	i := st.hash(key)
 	NewWithChains
 	for x := st.st[i]; x != nil; x = x.next {
 		if key == x.Key {
