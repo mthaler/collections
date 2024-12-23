@@ -74,7 +74,6 @@ func (st *HashST[K, V]) Put(key K, value V) {
 	}
 
 	i := st.hash(key)
-	NewWithChains
 	for x := st.st[i]; x != nil; x = x.next {
 		if key == x.Key {
 			x.Value = value
