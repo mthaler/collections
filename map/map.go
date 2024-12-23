@@ -110,5 +110,6 @@ func New[K comparable, V any]() HashST[K, V] {
 
 func NewWithChains[K comparable, V any](chains int) HashST[K, V] {
 	result := HashST[K, V]{m: chains}
+	result.st = make([]*Node, chains)
 	return result
 }
