@@ -104,8 +104,7 @@ func (st *HashST[K, V]) remove(x Node, key K) *Node {
 }
 
 func New[K comparable, V any]() HashST[K, V] {
-	result := HashST[K, V]{m: INIT_CAPACITY}
-	return result
+	return HashST[K, V](NewWithChains[K, V](INIT_CAPACITY))
 }
 
 func NewWithChains[K comparable, V any](chains int) HashST[K, V] {
