@@ -3,7 +3,7 @@ package mymap
 import (
 	"errors"
 
-	"github.com/mitchellh/hashstructure"
+	"github.com/mitchellh/hashstructure/v2"
 )
 
 const INIT_CAPACITY = 4
@@ -15,8 +15,8 @@ type Node struct {
 }
 
 type HashST[K comparable, V any] struct {
-	n  int     // number of key-value pairs
-	m  int     // number of chains
+	n  uint    // number of key-value pairs
+	m  uint    // number of chains
 	st []*Node // array of linked-list symbol tables
 }
 
@@ -34,7 +34,10 @@ func (st *HashST[K, V]) resize(chains int) {
 }
 
 func (st *HashST[K, V]) hash(key K) int {
-	hash := hashstructure.Hash(key, hashstructure.FormatV2, nil)
+	hash, err := hashstructure.Hash(key, hashstructure.FormatV2, nil)
+	if err != nil {
+		panic(err)
+	}
 	return (hash & 0x7fffffff) % st.m
 }
 
@@ -77,7 +80,7 @@ func (st *HashST[K, V]) Put(key K, value V) {
 		}
 	}
 	st.n++
-	st.st[i] = Node(key, value, st.st[i])
+	st.st[i] = &Node{Key: key, Value: value, next: st.st[i]}
 }
 
 func (st *HashST[K, V]) Remove(key K) {
