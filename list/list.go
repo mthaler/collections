@@ -1,10 +1,25 @@
 package list
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type Node[T any] struct {
 	data T
 	next *Node[T]
+}
+
+type LinkedListIterator[T any] struct {
+	hasNext bool
+	next    T
+}
+
+func (it LinkedListIterator[T]) HasNext() bool {
+	return it.hasNext
+}
+
+func (it LinkedListIterator[T]) Next() T {
+	return it.next
 }
 
 type LinkedList[T any] struct {
@@ -113,14 +128,15 @@ func (list *LinkedList[T]) FindNodeAt(index int) *Node[T] {
 	return current
 }
 
-func (list *LinkedList[T]) ToSlice() []T {
-	var result []T = make([]T, 0)
-	var current *Node[T] = list.head
-	for current != nil {
-		result = append(result, current.data)
-		current = current.next
+func (list *LinkedList[T]) CreateIterator() LinkedListIterator[T] {
+	if list.head != nil {
+		n := list.head
+		return
+	} else {
+		var n T
+		it := LinkedListIterator[T]{hasNext: false, next: n}
+		return it
 	}
-	return result
 }
 
 func NewList[T any](values ...T) LinkedList[T] {
