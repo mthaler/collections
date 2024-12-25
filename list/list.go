@@ -18,7 +18,9 @@ func (it LinkedListIterator[T]) HasNext() bool {
 }
 
 func (it LinkedListIterator[T]) Next() T {
-	return it.next.data
+	result := it.next.data
+	it.next = it.next.next
+	return result
 }
 
 type LinkedList[T any] struct {
