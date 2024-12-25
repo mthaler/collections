@@ -1,4 +1,4 @@
-package list
+package mylist
 
 import (
 	"fmt"
@@ -10,16 +10,15 @@ type Node[T any] struct {
 }
 
 type LinkedListIterator[T any] struct {
-	hasNext bool
-	next    T
+	next *Node[T]
 }
 
 func (it LinkedListIterator[T]) HasNext() bool {
-	return it.hasNext
+	return it.next != nil
 }
 
 func (it LinkedListIterator[T]) Next() T {
-	return it.next
+	return it.next.data
 }
 
 type LinkedList[T any] struct {
@@ -80,26 +79,26 @@ func (l *LinkedList[T]) Insert(n int, data T) {
 	}
 }
 
-func (list *LinkedList[T]) DeleteFront() {
-	if list.head != nil {
-		list.head = list.head.next
+func (l *LinkedList[T]) DeleteFront() {
+	if l.head != nil {
+		l.head = l.head.next
 		fmt.Printf("Head node of linked list has been deleted\n")
 		return
 	}
 }
 
-func (list *LinkedList[T]) DeleteBack() {
-	if list.head == nil {
+func (l *LinkedList[T]) DeleteBack() {
+	if l.head == nil {
 		fmt.Printf("Linked list is empty\n")
 	}
 
-	if list.head.next == nil {
-		list.head = nil
+	if l.head.next == nil {
+		l.head = nil
 		fmt.Printf("Last node of linked list has been deleted\n")
 		return
 	}
 
-	var current *Node[T] = list.head
+	var current *Node[T] = l.head
 	for current.next.next != nil {
 		current = current.next
 	}
@@ -108,9 +107,9 @@ func (list *LinkedList[T]) DeleteBack() {
 	fmt.Printf("Last node of linked list has been deleted")
 }
 
-func (list *LinkedList[T]) FindNodeAt(index int) *Node[T] {
+func (l *LinkedList[T]) FindNodeAt(index int) *Node[T] {
 	var count int = 0
-	var current *Node[T] = list.head
+	var current *Node[T] = l.head
 
 	for current != nil {
 		count++
@@ -121,20 +120,19 @@ func (list *LinkedList[T]) FindNodeAt(index int) *Node[T] {
 		return nil
 	}
 
-	current = list.head
+	current = l.head
 	for count = 1; count < index; count++ {
 		current = current.next
 	}
 	return current
 }
 
-func (list *LinkedList[T]) CreateIterator() LinkedListIterator[T] {
-	if list.head != nil {
-		n := list.head
-		return
+func (l *LinkedList[T]) CreateIterator() LinkedListIterator[T] {
+	if l.head != nil {
+		it := LinkedListIterator[T]{next: l.head}
+		return it
 	} else {
-		var n T
-		it := LinkedListIterator[T]{hasNext: false, next: n}
+		it := LinkedListIterator[T]{}
 		return it
 	}
 }
