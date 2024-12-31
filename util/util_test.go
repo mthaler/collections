@@ -9,7 +9,9 @@ import (
 
 func TestToSlice(t *testing.T) {
 	l := mylist.NewList[int]()
-	assert.True(t, h.IsEmpty(), "Map should be empty")
-	h.Put(1, 1234)
-	assert.False(t, h.IsEmpty(), "Map should not be empty")
+	assert.True(t, l.IsEmpty(), "list should be empty")
+	l = mylist.NewList[int](1, 2, 3)
+	result := ToSclice[int](l)
+	expected := []int{1, 2, 3}
+	assert.Equal(t, expected, result)
 }

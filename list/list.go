@@ -1,6 +1,7 @@
 package mylist
 
 import (
+	"collections"
 	"fmt"
 )
 
@@ -63,21 +64,23 @@ func (l *LinkedList[T]) Prepend(data T) {
 	l.n++
 }
 
-func (l *LinkedList[T]) Insert(n int, data T) {
+func (l *LinkedList[T]) Insert(n int, data T) error {
+	if n < 0 || n > l.n {
+		return fmt.Errorf("index %d out of bounds", n)
+	}
 	if n == 0 {
 		l.Prepend(data)
+		return nil
 	} else if n == l.n-1 {
 		l.Append(data)
+		return nil
 	} else {
-		temp1 := &Node[T]{data, nil}
-		temp2 := l.head
-
-		for i := 0; i < n-1; i++ {
-			temp2 = temp2.next
+		n := l.head
+		for ; n.next != nil; n = n.next {
+			n.next = &Node[T]{data: data, next: nil}
 		}
-		temp1.next = temp2.next
-		temp2.next = temp1
 		l.n++
+		return nil
 	}
 }
 
@@ -129,7 +132,7 @@ func (l *LinkedList[T]) FindNodeAt(index int) *Node[T] {
 	return current
 }
 
-func (l *LinkedList[T]) CreateIterator() LinkedListIterator[T] {
+func (l LinkedList[T]) CreateIterator() collections.Iterator[T] {
 	if l.head != nil {
 		it := LinkedListIterator[T]{next: l.head}
 		return it
