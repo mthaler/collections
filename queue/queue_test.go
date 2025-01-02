@@ -1,6 +1,17 @@
 package queue
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
+
+func TestIsEmpty(t *testing.T) {
+	var q Queue[int]
+	assert.True(t, q.IsEmpty())
+	q.Enqueue(1)
+	assert.False(t, q.IsEmpty())
+}
 
 func TestQueue(t *testing.T) {
 	var q Queue[int] = Queue[int]{}
