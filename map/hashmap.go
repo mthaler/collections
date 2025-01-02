@@ -124,7 +124,7 @@ func (st *HashST[K, V]) CreateIterator() collections.Iterator[*Node] {
 	if st.IsEmpty() {
 		return &Iterator[K, V]{}
 	} else {
-		var queue queue.Queue[Node]
+		var queue queue.Queue[*Node]
 		for i := 0; i < st.m; i++ {
 			for x := st.st[i]; x != nil; x = x.next {
 				queue.Enqueue(x)
