@@ -1,5 +1,7 @@
 package bag
 
+import "collections"
+
 /*
 Port of Robert Sedgewicks hash table code to Go
 */
@@ -11,6 +13,20 @@ type Bag[T any] struct {
 type Node[T any] struct {
 	item T
 	next *Node[T]
+}
+
+type Iterator[T any] struct {
+	next *Node[T]
+}
+
+func (it *Iterator[T]) HasNext() bool {
+	return it.next != nil
+}
+
+func (it *Iterator[T]) Next() T {
+	result := it.next.item
+	it.next = it.next.next
+	return result
 }
 
 /**
@@ -54,4 +70,14 @@ func (list *Bag[T]) ToSlice() []T {
 		current = current.next
 	}
 	return result
+}
+
+func (l Bag[T]) CreateIterator() collections.Iterator[T] {
+	if l.first != nil {
+		it := Iterator[T]{next: l.first}
+		return &it
+	} else {
+		it := Iterator[T]{}
+		return &it
+	}
 }
