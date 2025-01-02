@@ -1,6 +1,7 @@
 package bag
 
 import (
+	"collections/util"
 	"reflect"
 	"sort"
 	"testing"
@@ -30,7 +31,7 @@ func TestToSlice(t *testing.T) {
 
 	b.Add(3)
 	expected := []int{1, 2, 3}
-	result := b.ToSlice()
+	result := util.ToSclice[int](b)
 	sort.Ints(result)
 	if !reflect.DeepEqual(result, expected) {
 		t.Errorf("s = %v, expected %v", result, expected)

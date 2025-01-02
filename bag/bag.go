@@ -62,16 +62,6 @@ func (b *Bag[T]) Add(t T) {
 	b.n++
 }
 
-func (list *Bag[T]) ToSlice() []T {
-	var result []T = make([]T, 0)
-	var current *Node[T] = list.first
-	for current != nil {
-		result = append(result, current.item)
-		current = current.next
-	}
-	return result
-}
-
 func (l Bag[T]) CreateIterator() collections.Iterator[T] {
 	if l.first != nil {
 		it := Iterator[T]{next: l.first}
