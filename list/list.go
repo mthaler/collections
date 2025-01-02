@@ -14,11 +14,11 @@ type Iterator[T any] struct {
 	next *Node[T]
 }
 
-func (it Iterator[T]) HasNext() bool {
+func (it *Iterator[T]) HasNext() bool {
 	return it.next != nil
 }
 
-func (it Iterator[T]) Next() T {
+func (it *Iterator[T]) Next() T {
 	result := it.next.data
 	it.next = it.next.next
 	return result
@@ -135,10 +135,10 @@ func (l *LinkedList[T]) FindNodeAt(index int) *Node[T] {
 func (l LinkedList[T]) CreateIterator() collections.Iterator[T] {
 	if l.head != nil {
 		it := Iterator[T]{next: l.head}
-		return it
+		return &it
 	} else {
 		it := Iterator[T]{}
-		return it
+		return &it
 	}
 }
 
