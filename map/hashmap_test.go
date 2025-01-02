@@ -29,6 +29,7 @@ func TestContains(t *testing.T) {
 	assert.True(t, h.Contains(3))
 	assert.False(t, h.Contains(4))
 }
+
 func TestGet(t *testing.T) {
 	h := New[int, int]()
 	h.Put(1, 1234)

@@ -14,6 +14,10 @@ func (s *HashSet[K, V]) IsEmpty() bool {
 	return s.m.IsEmpty()
 }
 
+func (s *HashSet[K, V]) Contains(key K) bool {
+	return s.m.Contains(key)
+}
+
 func New[K comparable, V any]() HashSet[K, V] {
 	st := mymap.New[K, V]()
 	return HashSet[K, V]{m: st}
