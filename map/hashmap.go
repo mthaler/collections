@@ -1,6 +1,8 @@
 package mymap
 
 import (
+	"collections"
+	"collections/queue"
 	"errors"
 
 	"github.com/mitchellh/hashstructure/v2"
@@ -21,6 +23,18 @@ type HashST[K comparable, V any] struct {
 	n  int     // number of key-value pairs
 	m  int     // number of chains
 	st []*Node // array of linked-list symbol tables
+}
+
+type Iterator[K comparable, V any] struct {
+	queue queue.Queue[*Node]
+}
+
+func (it *Iterator[K, V]) HasNext() bool {
+	return !it.queue.IsEmpty()
+}
+
+func (it *Iterator[K, V]) Next() *Node {
+	return it.queue.Dequeue()
 }
 
 func (st *HashST[K, V]) resize(chains int) {
@@ -104,6 +118,20 @@ func (st *HashST[K, V]) remove(x Node, key K) *Node {
 	}
 	x.next = st.remove(*x.next, key)
 	return &x
+}
+
+func (st *HashST[K, V]) CreateIterator() collections.Iterator[*Node] {
+	if st.IsEmpty() {
+		return &Iterator[K, V]{}
+	} else {
+		var queue queue.Queue[Node]
+		for i := 0; i < st.m; i++ {
+			for x := st.st[i]; x != nil; x = x.next {
+				queue.Enqueue(x)
+			}
+		}
+		return &Iterator[K, V]{queue: queue}
+	}
 }
 
 func New[K comparable, V any]() HashST[K, V] {
