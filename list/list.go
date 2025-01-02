@@ -142,7 +142,7 @@ func (l LinkedList[T]) CreateIterator() collections.Iterator[T] {
 	}
 }
 
-func NewList[T any](values ...T) LinkedList[T] {
+func NewL[T any](values ...T) LinkedList[T] {
 	if len(values) == 0 {
 		return LinkedList[T]{}
 	}
