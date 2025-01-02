@@ -1,7 +1,6 @@
 package collections
 
 import (
-	mylist "collections/list"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
