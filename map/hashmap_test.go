@@ -35,3 +35,10 @@ func TestGet(t *testing.T) {
 	v, _ := h.Get(1)
 	assert.Equal(t, 1234, v)
 }
+
+func TestPut(t *testing.T) {
+	h := New[int, int]()
+	h.Put(1, 1234)
+	v, _ := h.Get(1)
+	assert.Equal(t, 1234, v)
+}
