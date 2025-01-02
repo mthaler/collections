@@ -7,9 +7,14 @@ type HashSet[K comparable, V any] struct {
 }
 
 func (s *HashSet[K, V]) Size() int {
-	return s.Size()
+	return s.m.Size()
 }
 
 func (s *HashSet[K, V]) IsEmpty() bool {
-	return s.IsEmpty()
+	return s.m.IsEmpty()
+}
+
+func New[K comparable, V any]() HashSet[K, V] {
+	st := mymap.New[K, V]()
+	return HashSet[K, V]{m: st}
 }
