@@ -64,23 +64,20 @@ func (l *LinkedList[T]) Prepend(data T) {
 	l.n++
 }
 
-func (l *LinkedList[T]) Insert(n int, data T) error {
+func (l *LinkedList[T]) Insert(n int, data T) {
 	if n < 0 || n > l.n {
-		return fmt.Errorf("ndex %d out of bounds", n)
+		panic(fmt.Sprintf("Index %d out of bounds", n))
 	}
 	if n == 0 {
 		l.Prepend(data)
-		return nil
 	} else if n == l.n-1 {
 		l.Append(data)
-		return nil
 	} else {
 		n := l.head
 		for ; n.next != nil; n = n.next {
 			n.next = &Node[T]{data: data, next: nil}
 		}
 		l.n++
-		return nil
 	}
 }
 
