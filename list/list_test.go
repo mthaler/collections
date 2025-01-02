@@ -30,13 +30,13 @@ func TestPrepend(t *testing.T) {
 	assert.Equal(t, []int{3, 2, 1}, util.ToSclice[int](l))
 }
 
-/*func TestInsert(t *testing.T) {
+func TestInsert(t *testing.T) {
 	var l LinkedList[int]
 	l.Append(1)
 	l.Insert(1, 2)
 	l.Append(3)
 	assert.Equal(t, []int{1, 2, 3}, util.ToSclice[int](l))
-}*/
+}
 
 func TestDeleteFront(t *testing.T) {
 	var l LinkedList[int]

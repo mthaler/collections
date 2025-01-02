@@ -73,9 +73,13 @@ func (l *LinkedList[T]) Insert(n int, data T) {
 	} else if n == l.n-1 {
 		l.Append(data)
 	} else {
-		n := l.head
-		for ; n.next != nil; n = n.next {
-			n.next = &Node[T]{data: data, next: nil}
+		i := 0
+		c := l.head
+		for ; c != nil; c = c.next {
+			i++
+			if i == n {
+				c.next = &Node[T]{data: data, next: c.next}
+			}
 		}
 		l.n++
 	}
@@ -107,26 +111,6 @@ func (l *LinkedList[T]) DeleteBack() {
 	current.next = nil
 
 	fmt.Printf("Last node of linked list has been deleted")
-}
-
-func (l *LinkedList[T]) FindNodeAt(index int) *Node[T] {
-	var count int = 0
-	var current *Node[T] = l.head
-
-	for current != nil {
-		count++
-		current = current.next
-	}
-
-	if index <= 0 || index > count {
-		return nil
-	}
-
-	current = l.head
-	for count = 1; count < index; count++ {
-		current = current.next
-	}
-	return current
 }
 
 func (l LinkedList[T]) CreateIterator() collections.Iterator[T] {
