@@ -66,7 +66,7 @@ func (l *LinkedList[T]) Prepend(data T) {
 
 func (l *LinkedList[T]) Insert(n int, data T) error {
 	if n < 0 || n > l.n {
-		return fmt.Errorf("index %d out of bounds", n)
+		return fmt.Errorf("ndex %d out of bounds", n)
 	}
 	if n == 0 {
 		l.Prepend(data)
