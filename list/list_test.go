@@ -55,3 +55,12 @@ func TestDeleteBack(t *testing.T) {
 	l.DeleteBack()
 	assert.Equal(t, []int{1, 2}, util.ToSclice[int](l))
 }
+
+func TestDelete(t *testing.T) {
+	var l LinkedList[int]
+	l.Append(1)
+	l.Append(2)
+	l.Append(3)
+	l.Delete(1)
+	assert.Equal(t, []int{1, 3}, util.ToSclice[int](l))
+}

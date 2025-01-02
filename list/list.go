@@ -113,6 +113,26 @@ func (l *LinkedList[T]) DeleteBack() {
 	fmt.Printf("Last node of linked list has been deleted")
 }
 
+func (l *LinkedList[T]) Delete(n int) {
+	if n < 0 || n > l.n {
+		panic(fmt.Sprintf("Index %d out of bounds", n))
+	}
+	if n == l.n-1 {
+		l.DeleteBack()
+	} else {
+		i := 0
+		c := l.head
+		for ; c != nil; c = c.next {
+			i++
+			if i == n {
+				newNext := c.next.next
+				c.next = newNext
+			}
+		}
+		l.n++
+	}
+}
+
 func (l LinkedList[T]) CreateIterator() collections.Iterator[T] {
 	if l.head != nil {
 		it := Iterator[T]{next: l.head}
