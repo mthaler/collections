@@ -6,6 +6,9 @@ import (
 	"github.com/mitchellh/hashstructure/v2"
 )
 
+/*
+Port of Robert Sedgewicks hash table code to Go
+*/
 const INIT_CAPACITY = 4
 
 type Node struct {
