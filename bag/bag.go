@@ -1,5 +1,8 @@
 package bag
 
+/*
+Port of Robert Sedgewicks hash table code to Go
+*/
 type Bag[T any] struct {
 	first *Node[T] // beginning of bag
 	n     int      // number of elements in bag
