@@ -19,8 +19,7 @@ func (s *HashSet[K]) Contains(key K) bool {
 }
 
 func (s *HashSet[K]) Put(key K) {
-	var empty interface{}
-	s.m.Put(key, empty)
+	s.m.Put(key, struct{}{})
 }
 
 func (s *HashSet[K]) Remove(key K) {
