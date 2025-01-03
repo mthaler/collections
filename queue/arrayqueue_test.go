@@ -7,14 +7,14 @@ import (
 )
 
 func TestIsEmpty(t *testing.T) {
-	var q Queue[int]
+	var q ArrayQueue[int]
 	assert.True(t, q.IsEmpty())
 	q.Enqueue(1)
 	assert.False(t, q.IsEmpty())
 }
 
 func TestQueue(t *testing.T) {
-	var q Queue[int] = Queue[int]{}
+	var q ArrayQueue[int]
 	q.Enqueue(1)
 	var result = q.Dequeue()
 	if result != 1 {
