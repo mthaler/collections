@@ -24,6 +24,16 @@ func TestSize(t *testing.T) {
 	assert.Equal(t, 3, b.Size())
 }
 
+func TestAdd(t *testing.T) {
+	var b Bag[int]
+	b.Add(1)
+	b.Add(2)
+	b.Add(3)
+	result := util.ToSclice[int](b)
+	sort.Ints(result)
+	assert.Equal(t, []int{1, 2, 3}, result)
+}
+
 func TestToSlice(t *testing.T) {
 	var b Bag[int]
 	b.Add(1)
