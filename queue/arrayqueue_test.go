@@ -16,8 +16,5 @@ func TestIsEmpty(t *testing.T) {
 func TestQueue(t *testing.T) {
 	var q ArrayQueue[int]
 	q.Enqueue(1)
-	var result = q.Dequeue()
-	if result != 1 {
-		t.Errorf("q.Dequeue() = %d, expected %d", result, 1)
-	}
+	assert.Equal(t, 1, q.Dequeue())
 }
