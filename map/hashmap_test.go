@@ -1,6 +1,7 @@
 package mymap
 
 import (
+	"collections/util"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -42,4 +43,13 @@ func TestPut(t *testing.T) {
 	h.Put(1, 1234)
 	v, _ := h.Get(1)
 	assert.Equal(t, 1234, v)
+}
+
+func TestRemove(t *testing.T) {
+	h := New[int, int]()
+	h.Put(1, 1)
+	h.Put(2, 2)
+	h.Put(3, 3)
+	h.Remove(1)
+	assert.Equal(t, []int{1, 3}, util.ToSclice[h]())
 }
