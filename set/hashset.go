@@ -23,6 +23,10 @@ func (s *HashSet[K]) Put(key K) {
 	s.m.Put(key, empty)
 }
 
+func (s *HashSet[K]) Remove(key K) {
+	s.m.Remove(key)
+}
+
 func New[K comparable]() HashSet[K] {
 	st := mymap.New[K, any]()
 	return HashSet[K]{m: st}
