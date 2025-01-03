@@ -19,7 +19,8 @@ func (s *HashSet[K]) Contains(key K) bool {
 }
 
 func (s *HashSet[K]) Put(key K) {
-	s.m.Put(key, interface{}{})
+	var empty interface{}
+	s.m.Put(key, empty)
 }
 
 func New[K comparable]() HashSet[K] {
