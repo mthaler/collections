@@ -30,7 +30,7 @@ func (s *HashSet[K]) Remove(key K) {
 }
 
 type Iterator[K comparable] struct {
-	it mymap.Iterator[*mymap.Node]
+	it collections.Iterator[*mymap.Node]
 }
 
 func (it *Iterator[K]) HasNext() bool {
@@ -46,7 +46,7 @@ func (s *HashSet[K]) CreateIterator() collections.Iterator[K] {
 	if s.IsEmpty() {
 		return &Iterator[K]{}
 	} else {
-		return &Iterator[K]{it: s.m.CreateIterator[*mymap.Node]()}
+		return &Iterator[K]{it: s.m.CreateIterator()}
 	}
 }
 
