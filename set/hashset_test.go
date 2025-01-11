@@ -43,7 +43,7 @@ func TestRemove(t *testing.T) {
 	s.Put(2)
 	s.Put(3)
 	s.Remove(1)
-	assert.True(t, s.Contains(1))
-	assert.False(t, s.Contains(2))
+	assert.False(t, s.Contains(1))
+	assert.True(t, s.Contains(2))
 	assert.True(t, s.Contains(3))
 }
