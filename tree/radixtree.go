@@ -165,6 +165,41 @@ func (r *RadixTree) KeysThatMatch(pattern string) []string {
 	return results
 }
 
+func collect(x *Node, prefix strings.Builder, pattern string, results queue.Queue[string]) {
+	if x == nil {
+		return
+	}
+	d := len(prefix)
+	if d == len(pattern) && x.val != nil {
+		results.Enqueue(prefix.String())
+	}
+	if d == len(pattern) {
+		return
+	}
+}
+
+private void collect(x *Node, StringBuilder prefix, String pattern, Queue<String> results) {
+	if (x == null) return;
+	int d = prefix.length();
+	if (d == pattern.length() && x.val != null)
+		results.enqueue(prefix.toString());
+	if (d == pattern.length())
+		return;
+	char c = pattern.charAt(d);
+	if (c == '.') {
+		for (char ch = 0; ch < R; ch++) {
+			prefix.append(ch);
+			collect(x.next[ch], prefix, pattern, results);
+			prefix.deleteCharAt(prefix.length() - 1);
+		}
+	}
+	else {
+		prefix.append(c);
+		collect(x.next[c], prefix, pattern, results);
+		prefix.deleteCharAt(prefix.length() - 1);
+	}
+}
+
 func collectPattern(x *node, prefix []rune, pattern []rune, results []string) []string {
 
 	if x == nil {
