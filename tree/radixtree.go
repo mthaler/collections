@@ -8,8 +8,8 @@ import (
 )
 
 type node struct {
-	value interface{} // value of the node or nil if there is no value
-	next  []*node     // array of pointers to the next node
+	value *any    // value of the node or nil if there is no value
+	next  []*node // array of pointers to the next node
 }
 
 const R = 256 // extended ASCII
@@ -20,21 +20,21 @@ func createNode() *node {
 	return &n
 }
 
-type RadixTree struct {
+type TrieST struct {
 	root *node // root of trie
 	n    int   // number of keys in trie
 
 }
 
 // Returns the value associated with the given key if the radix tree contains the key or nil.
-func (r *RadixTree) Get(key string) interface{} {
-	x := get(r.root, key, 0)
+func (t TrieST) Get(key string) any {
+	x := get(t.root, key, 0)
 	return x
 }
 
 // Returns a boolean indicating if the radix tree contains the given key.
-func (r *RadixTree) Contains(key string) bool {
-	return r.Get(key) != nil
+func (t *TrieST) Contains(key string) bool {
+	return t.Get(key) != nil
 }
 
 func get(x *node, key string, d int) *node {
@@ -52,60 +52,56 @@ func get(x *node, key string, d int) *node {
 }
 
 // Adds the given key and value to the radix tree, overwriting the old value with the new value if the radix tree already contains the key.
-func (r *RadixTree) Put(key string, value interface{}) {
-
+func (t *TrieST) Put(key string, value any) {
 	if value == nil {
-		r.Delete(key)
+		t.Delete(key)
 	}
-	r.root = r.put(r.root, key, value, 0)
+	t.root = t.put(t.root, key, value, 0)
 }
 
-func (r *RadixTree) put(x *node, key string, value interface{}, d int) *node {
-
+func (t *TrieST) put(x *node, key string, value any, d int) *node {
 	if x == nil {
 		x = createNode()
 	}
 	if d == len(key) {
 		if x.value == nil {
-			r.n++
+			t.n++
 		}
-		x.value = value
+		x.value = &value
 		return x
 	}
 	c := key[d]
-	x.next[c] = r.put(x.next[c], key, value, d+1)
+	x.next[c] = t.put(x.next[c], key, value, d+1)
 	return x
 }
 
 // Returns the number of key-value pairs of the radix tree.
-func (r *RadixTree) Size() int {
-	return r.n
+func (t *TrieST) Size() int {
+	return t.n
 }
 
 // Returns a boolean indicating if the radix tree is empty
-func (r *RadixTree) IsEmpty() bool {
-	return r.Size() == 0
+func (t *TrieST) IsEmpty() bool {
+	return t.Size() == 0
 }
 
 // Removes the key from the radix tree if the key is present.
-func (r *RadixTree) Delete(key string) {
-
-	r.root = r.delete(r.root, key, 0)
+func (t *TrieST) Delete(key string) {
+	t.root = t.delete(t.root, key, 0)
 }
 
-func (r *RadixTree) delete(x *node, key string, d int) *node {
-
+func (t *TrieST) delete(x *node, key string, d int) *node {
 	if x == nil {
 		return nil
 	}
 	if d == len(key) {
 		if x.value != nil {
-			r.n--
+			t.n--
 		}
-		x.value = nilstring
+		x.value = nil
 	} else {
 		c := key[d]
-		x.next[c] = r.delete(x.next[c], key, d-1)
+		x.next[c] = t.delete(x.next[c], key, d-1)
 	}
 
 	// remove subtrie rooted at x if it is completely empty
@@ -121,17 +117,16 @@ func (r *RadixTree) delete(x *node, key string, d int) *node {
 }
 
 // Returns all keys of the radix tree.
-func (r *RadixTree) Keys() []string {
-
-	return r.KeysWithPrefix("")
+func (t *TrieST) Keys() []string {
+	return t.KeysWithPrefix("")
 }
 
 // Returns all keys of the radix tree that start with the given prefix.
-func (r *RadixTree) KeysWithPrefix(prefix string) []string {
+func (t *TrieST) KeysWithPrefix(prefix string) []string {
 
 	results := make([]string, 0)
 
-	x := get(r.root, prefix, 0)
+	x := get(t.root, prefix, 0)
 	b := []rune(prefix)
 	results = collect(x, b, results)
 	return results
@@ -156,7 +151,7 @@ func collect(x *node, prefix string, pattern string, results queue.Queue[int]) {
 
 // Returns all of the keys of the radix tree that match the given pattern,
 // where . symbol is treated as wildcard character that matches any single character.
-func (r *RadixTree) KeysThatMatch(pattern string) []string {
+func (r *TrieST) KeysThatMatch(pattern string) []string {
 
 	results := make([]string, 0)
 
@@ -176,28 +171,7 @@ func collect(x *Node, prefix strings.Builder, pattern string, results queue.Queu
 	if d == len(pattern) {
 		return
 	}
-}
 
-private void collect(x *Node, StringBuilder prefix, String pattern, Queue<String> results) {
-	if (x == null) return;
-	int d = prefix.length();
-	if (d == pattern.length() && x.val != null)
-		results.enqueue(prefix.toString());
-	if (d == pattern.length())
-		return;
-	char c = pattern.charAt(d);
-	if (c == '.') {
-		for (char ch = 0; ch < R; ch++) {
-			prefix.append(ch);
-			collect(x.next[ch], prefix, pattern, results);
-			prefix.deleteCharAt(prefix.length() - 1);
-		}
-	}
-	else {
-		prefix.append(c);
-		collect(x.next[c], prefix, pattern, results);
-		prefix.deleteCharAt(prefix.length() - 1);
-	}
 }
 
 func collectPattern(x *node, prefix []rune, pattern []rune, results []string) []string {
@@ -230,7 +204,7 @@ func collectPattern(x *node, prefix []rune, pattern []rune, results []string) []
 
 // Returns the string in the symbol table that is the longest prefix of the given query.
 
-func (r *RadixTree) LongestPrefixOf(query string) string {
+func (t *TrieST) LongestPrefixOf(query string) string {
 
 	q := []rune(query)
 	length := longestPrefixOf(r.root, q, 0, -1)
@@ -257,10 +231,10 @@ func longestPrefixOf(x *node, query []rune, d int, length int) int {
 }
 
 // Prints the structure of the radix tree
-func (r *RadixTree) PrintStructure() {
+func (t *TrieST) PrintStructure() {
 	var b strings.Builder
 
-	printStructure(r.root, 0, &b)
+	printStructure(t.root, 0, &b)
 	fmt.Println(b.String())
 
 }
