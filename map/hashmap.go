@@ -25,15 +25,15 @@ type HashST[K comparable, V any] struct {
 	st []*Node // array of linked-list symbol tables
 }
 
-type Iterator[K comparable, V any] struct {
+type Iterator struct {
 	queue queue.Queue[*Node]
 }
 
-func (it *Iterator[K, V]) HasNext() bool {
+func (it *Iterator) HasNext() bool {
 	return !it.queue.IsEmpty()
 }
 
-func (it *Iterator[K, V]) Next() *Node {
+func (it *Iterator) Next() *Node {
 	return it.queue.Dequeue()
 }
 
@@ -122,7 +122,7 @@ func (st *HashST[K, V]) remove(x Node, key K) *Node {
 
 func (st *HashST[K, V]) CreateIterator() collections.Iterator[*Node] {
 	if st.IsEmpty() {
-		return &Iterator[K, V]{}
+		return &Iterator{}
 	} else {
 		var queue queue.Queue[*Node]
 		for i := 0; i < st.m; i++ {
@@ -130,7 +130,7 @@ func (st *HashST[K, V]) CreateIterator() collections.Iterator[*Node] {
 				queue.Enqueue(x)
 			}
 		}
-		return &Iterator[K, V]{queue: queue}
+		return &Iterator{queue: queue}
 	}
 }
 
