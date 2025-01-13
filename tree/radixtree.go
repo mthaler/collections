@@ -2,8 +2,6 @@ package tree
 
 import (
 	"collections/queue"
-	"fmt"
-	"strings"
 	"unicode/utf8"
 )
 
@@ -85,37 +83,6 @@ func (t *TrieST) IsEmpty() bool {
 	return t.Size() == 0
 }
 
-// Removes the key from the radix tree if the key is present.
-func (t *TrieST) Delete(key string) {
-	t.root = t.delete(t.root, key, 0)
-}
-
-func (t *TrieST) delete(x *node, key string, d int) *node {
-	if x == nil {
-		return nil
-	}
-	if d == len(key) {
-		if x.value != nil {
-			t.n--
-		}
-		x.value = nil
-	} else {
-		c := key[d]
-		x.next[c] = t.delete(x.next[c], key, d-1)
-	}
-
-	// remove subtrie rooted at x if it is completely empty
-	if x.value != nil {
-		return x
-	}
-	for c := 0; c < R; c++ {
-		if x.next[c] != nil {
-			return x
-		}
-	}
-	return nil
-}
-
 // Returns all keys of the radix tree.
 func (t *TrieST) Keys() []string {
 	return t.KeysWithPrefix("")
@@ -151,54 +118,12 @@ func collect(x *node, prefix string, pattern string, results queue.Queue[int]) {
 
 // Returns all of the keys of the radix tree that match the given pattern,
 // where . symbol is treated as wildcard character that matches any single character.
-func (r *TrieST) KeysThatMatch(pattern string) []string {
+func (t *TrieST) KeysThatMatch(pattern string) []string {
 
 	results := make([]string, 0)
 
 	b := make([]rune, 0)
-	results = collectPattern(r.root, b, []rune(pattern), results)
-	return results
-}
-
-func collect(x *Node, prefix strings.Builder, pattern string, results queue.Queue[string]) {
-	if x == nil {
-		return
-	}
-	d := len(prefix)
-	if d == len(pattern) && x.val != nil {
-		results.Enqueue(prefix.String())
-	}
-	if d == len(pattern) {
-		return
-	}
-
-}
-
-func collectPattern(x *node, prefix []rune, pattern []rune, results []string) []string {
-
-	if x == nil {
-		return results
-	}
-	d := len(prefix)
-	if d == len(pattern) && x.value != nil {
-		results = enqueue(results, string(prefix))
-
-	}
-	if d == len(pattern) {
-		return results
-	}
-	c := pattern[d]
-	if c == '.' {
-		for ch := 0; ch < R; ch++ {
-			prefix = append(prefix, rune(ch))
-			results = collectPattern(x.next[ch], prefix, pattern, results)
-			prefix = deleteCharAt(prefix, len(prefix)-1)
-		}
-	} else {
-		prefix = append(prefix, rune(c))
-		results = collectPattern(x.next[c], prefix, pattern, results)
-		prefix = deleteCharAt(prefix, len(prefix)-1)
-	}
+	results = collectPattern(t.root, b, []rune(pattern), results)
 	return results
 }
 
@@ -230,52 +155,33 @@ func longestPrefixOf(x *node, query []rune, d int, length int) int {
 	return longestPrefixOf(x.next[c], query, d+1, length)
 }
 
-// Prints the structure of the radix tree
-func (t *TrieST) PrintStructure() {
-	var b strings.Builder
-
-	printStructure(t.root, 0, &b)
-	fmt.Println(b.String())
-
+// Removes the key from the radix tree if the key is present.
+func (t *TrieST) Delete(key string) {
+	t.root = t.delete(t.root, key, 0)
 }
 
-func printStructure(x *node, d int, b *strings.Builder) {
+func (t *TrieST) delete(x *node, key string, d int) *node {
+	if x == nil {
+		return nil
+	}
+	if d == utf8.RuneCountInString(key) {
+		if x.value != nil {
+			t.n--
+		}
+		x.value = nil
+	} else {
+		c := []rune(key)[d]
+		x.next[c] = t.delete(x.next[c], key, d+1)
+	}
 
-	runes := make([]rune, 0)
-	children := make([]*node, 0)
+	// remove subtrie rooted at x if it is completely empty
+	if x.value != nil {
+		return x
+	}
 	for c := 0; c < R; c++ {
 		if x.next[c] != nil {
-			runes = append(runes, rune(c))
-			children = append(children, x.next[c])
+			return x
 		}
 	}
-	l := len(runes)
-	if l == 1 {
-		b.WriteRune(runes[0])
-		printStructure(children[0], d+1, b)
-	} else if l > 1 {
-		for i, r := range runes {
-			b.WriteString("\n")
-
-			b.WriteString(ws(d))
-
-			b.WriteRune(r)
-			child := children[i]
-			printStructure(child, d+1, b)
-		}
-	}
-}
-
-func ws(count int) string {
-
-	return strings.Repeat(" ", count)
-
-}
-
-func deleteCharAt(prefix []rune, index int) []rune {
-	if index < 0 || len(prefix)-1 > index {
-		return prefix
-	} else {
-		return append(prefix[0:index], prefix[index+1:]...)
-	}
+	return nil
 }
