@@ -6,15 +6,21 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestGet(t *testing.T) {
+	r := createTestTree()
+	assert.Equal(t, 1, r.Get("romane"))
+}
+
 func TestContains(t *testing.T) {
 	r := createTestTree()
 	assert.True(t, r.Contains("romane"))
 	assert.False(t, r.Contains("test"))
 }
 
-func TestGet(t *testing.T) {
+func TestPut(t *testing.T) {
 	r := createTestTree()
-	assert.Equal(t, 1, r.Get("romane"))
+	r.Put("test", 42)
+	assert.Equal(t, 42, r.Get("test"))
 }
 
 func TestSize(t *testing.T) {
