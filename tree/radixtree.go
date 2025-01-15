@@ -62,7 +62,7 @@ type TrieST struct {
  * @throws IllegalArgumentException if {@code key} is {@code null}
  */
 func (t *TrieST) Contains(key string) bool {
-	return t.Get(key) != nil
+	return get(t.root, key, 0) != nil
 }
 
 // Returns the value associated with the given key if the radix tree contains the key or nil.
