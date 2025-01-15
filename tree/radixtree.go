@@ -48,27 +48,33 @@ func createNode() *node {
  *
  * Ported from Robert Sedgewicks Java code
  */
-type TrieST struct {
+type TrieST[T any] struct {
 	root *node // root of trie
 	n    int   // number of keys in trie
 
 }
 
 /**
+ * Returns the value associated with the given key.
+ * @param key the key
+ * @return the value associated with the given key if the key is in the symbol table
+ *     and {@code null} if the key is not in the symbol table
+ * @throws IllegalArgumentException if {@code key} is {@code null}
+ */
+func (t TrieST[T]) Get(key string) any {
+	x := get(t.root, key, 0)
+	return x
+}
+
+/**
  * Does this symbol table contain the given key?
  * @param key the key
  * @return {@code true} if this symbol table contains {@code key} and
- *     {@code false} otherwise
+ *     {@code false} otherwiseBankverbindung einfach dafür, Sofortaufladungen durchzuführen, automatisch aufzuladen oder jederzeit per
  * @throws IllegalArgumentException if {@code key} is {@code null}
  */
-func (t *TrieST) Contains(key string) bool {
+func (t *TrieST[T]) Contains(key string) bool {
 	return get(t.root, key, 0) != nil
-}
-
-// Returns the value associated with the given key if the radix tree contains the key or nil.
-func (t TrieST) Get(key string) any {
-	x := get(t.root, key, 0)
-	return x
 }
 
 func get(x *node, key string, d int) *node {
@@ -92,19 +98,12 @@ func get(x *node, key string, d int) *node {
  * @param key the key
  * @param val the value
  * @throws IllegalArgumentException if {@code key} is {@code null}
- */ /**
- * Inserts the key-value pair into the symbol table, overwriting the old value
- * with the new value if the key is already in the symbol table.
- * If the value is {@code null}, this effectively deletes the key from the symbol table.
- * @param key the key
- * @param val the value
- * @throws IllegalArgumentException if {@code key} is {@code null}
  */
-func (t *TrieST) Put(key string, value any) {
+func (t *TrieST[T]) Put(key string, value any) {
 	t.root = t.put(t.root, key, value, 0)
 }
 
-func (t *TrieST) put(x *node, key string, value any, d int) *node {
+func (t *TrieST[T]) put(x *node, key string, value any, d int) *node {
 	if x == nil {
 		x = createNode()
 	}
@@ -124,7 +123,7 @@ func (t *TrieST) put(x *node, key string, value any, d int) *node {
  * Returns the number of key-value pairs in this symbol table.
  * @return the number of key-value pairs in this symbol table
  */
-func (t *TrieST) Size() int {
+func (t *TrieST[T]) Size() int {
 	return t.n
 }
 
@@ -132,7 +131,7 @@ func (t *TrieST) Size() int {
  * Is this symbol table empty?
  * @return {@code true} if this symbol table is empty and {@code false} otherwise
  */
-func (t *TrieST) IsEmpty() bool {
+func (t *TrieST[T]) IsEmpty() bool {
 	return t.Size() == 0
 }
 
@@ -142,7 +141,7 @@ func (t *TrieST) IsEmpty() bool {
  * use the foreach notation: {@code for (Key key : st.keys())}.
  * @return all keys in the symbol table as an {@code Iterable}
  */
-func (t *TrieST) Keys() []string {
+func (t *TrieST[T]) Keys() []string {
 	return t.KeysWithPrefix("")
 }
 
@@ -152,7 +151,7 @@ func (t *TrieST) Keys() []string {
  * use the foreach notation: {@code for (Key key : st.keys())}.
  * @return all keys in the symbol table as an {@code Iterable}
  */
-func (t *TrieST) KeysWithPrefix(prefix string) []string {
+func (t *TrieST[T]) KeysWithPrefix(prefix string) []string {
 	results := queue.New[string]()
 	x := get(t.root, prefix, 0)
 	var sb strings.Builder
@@ -191,7 +190,7 @@ func collect(x *node, prefix *strings.Builder, results queue.Queue[string]) {
  * @return all of the keys in the symbol table that match {@code pattern},
  *     as an iterable, where . is treated as a wildcard character.
  */
-func (t *TrieST) KeysThatMatch(pattern string) []string {
+func (t *TrieST[T]) KeysThatMatch(pattern string) []string {
 
 	results := queue.New[string]()
 	var sb strings.Builder
@@ -242,7 +241,7 @@ func collectPattern(x *node, prefix *strings.Builder, pattern string, results qu
  *     or {@code null} if no such string
  * @throws IllegalArgumentException if {@code query} is {@code null}
  */
-func (t *TrieST) LongestPrefixOf(query string) string {
+func (t *TrieST[T]) LongestPrefixOf(query string) string {
 	q := []rune(query)
 	length := longestPrefixOf(t.root, q, 0, -1)
 	if length == -1 {
@@ -264,7 +263,7 @@ func longestPrefixOf(x *node, query []rune, d int, length int) int {
 	if x.value != nil {
 		length = d
 	}
-	if d == len(query) {
+	if d == utf8.RuneCountInString(string(query)) {
 		return length
 	}
 	c := query[d]
@@ -276,11 +275,11 @@ func longestPrefixOf(x *node, query []rune, d int, length int) int {
  * @param key the key
  * @throws IllegalArgumentException if {@code key} is {@code null}
  */
-func (t *TrieST) Delete(key string) {
+func (t *TrieST[T]) Delete(key string) {
 	t.root = t.delete(t.root, key, 0)
 }
 
-func (t *TrieST) delete(x *node, key string, d int) *node {
+func (t *TrieST[T]) delete(x *node, key string, d int) *node {
 	if x == nil {
 		return nil
 	}

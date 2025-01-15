@@ -12,6 +12,11 @@ func TestContains(t *testing.T) {
 	assert.False(t, r.Contains("test"))
 }
 
+func TestGet(t *testing.T) {
+	r := createTestTree()
+	assert.Equal(t, 1, r.Get("romane"))
+}
+
 func TestSize(t *testing.T) {
 	r := createTestTree()
 	assert.Equal(t, 7, r.Size())
@@ -37,6 +42,12 @@ func TestKeysWithPrefix(t *testing.T) {
 func TestKeysThatMatch(t *testing.T) {
 	r := createTestTree()
 	assert.Equal(t, []string{"romane"}, r.KeysThatMatch("roman."))
+}
+
+func TestDelete(t *testing.T) {
+	r := createTestTree()
+	r.Delete("romane")
+	assert.Equal(t, 6, r.Size())
 }
 
 func createTestTree() TrieST {
