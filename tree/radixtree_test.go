@@ -12,11 +12,6 @@ func TestContains(t *testing.T) {
 	assert.False(t, r.Contains("test"))
 }
 
-func TestKeys(t *testing.T) {
-	r := createTestTree()
-	assert.Equal(t, []string{"romane", "romanus", "romulus", "rubens", "ruber", "rubicon", "rubicundus"}, r.Keys())
-}
-
 func TestSize(t *testing.T) {
 	r := createTestTree()
 	assert.Equal(t, 7, r.Size())
@@ -27,6 +22,21 @@ func TestIsEmpty(t *testing.T) {
 	assert.True(t, r.IsEmpty())
 	r2 := createTestTree()
 	assert.False(t, r2.IsEmpty())
+}
+
+func TestKeys(t *testing.T) {
+	r := createTestTree()
+	assert.Equal(t, []string{"romane", "romanus", "romulus", "rubens", "ruber", "rubicon", "rubicundus"}, r.Keys())
+}
+
+func TestKeysWithPrefix(t *testing.T) {
+	r := createTestTree()
+	assert.Equal(t, []string{"rubens", "ruber", "rubicon", "rubicundus"}, r.KeysWithPrefix("ru"))
+}
+
+func TestKeysThatMatch(t *testing.T) {
+	r := createTestTree()
+	assert.Equal(t, []string{"romane"}, r.KeysThatMatch("roman."))
 }
 
 func createTestTree() TrieST {
