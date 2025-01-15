@@ -193,39 +193,45 @@ func collect(x *node, prefix strings.Builder, results queue.Queue[string]) {
  */
 func (t *TrieST) KeysThatMatch(pattern string) []string {
 
-	results := make([]string, 0)
-
-	b := make([]rune, 0)
-	results = collectPattern(t.root, b, []rune(pattern), results)
-	return results
+	results := queue.New[string]()
+	var sb strings.Builder
+	collectPattern(t.root, sb, pattern, results)
+	r := make([]string, 0)
+	for !results.IsEmpty() {
+		r = append(r, results.Dequeue())
+	}
+	return r
 }
 
-func collectPattern(x *node, prefix []rune, pattern []rune, results []string) []string {
-
+func collectPattern(x *node, prefix strings.Builder, pattern string, results queue.Queue[string]) {
 	if x == nil {
-		return results
+		return
 	}
-	d := len(prefix)
-	if d == len(pattern) && x.value != nil {
-		results = enqueue(results, string(prefix))
+	d := utf8.RuneCountInString(prefix.String())
+	p := utf8.RuneCountInString(pattern)
+	if d == p && x.value != nil {
+		results.Enqueue(prefix.String())
 
 	}
-	if d == len(pattern) {
-		return results
+	if d == p {
+		return
 	}
-	c := pattern[d]
+	c := []rune(pattern)[d]
 	if c == '.' {
 		for ch := 0; ch < R; ch++ {
-			prefix = append(prefix, rune(ch))
-			results = collectPattern(x.next[ch], prefix, pattern, results)
-			prefix = deleteCharAt(prefix, len(prefix)-1)
+			prefix.WriteRune(rune(ch))
+			collectPattern(x.next[ch], prefix, pattern, results)
+			s := deleteCharAt([]rune(prefix.String()), utf8.RuneCountInString(prefix.String())-1)
+			prefix.Reset()
+			prefix.WriteString(string(s))
 		}
 	} else {
-		prefix = append(prefix, rune(c))
-		results = collectPattern(x.next[c], prefix, pattern, results)
-		prefix = deleteCharAt(prefix, len(prefix)-1)
+		prefix.WriteRune(rune(c))
+		collectPattern(x.next[c], prefix, pattern, results)
+		s := deleteCharAt([]rune(prefix.String()), utf8.RuneCountInString(prefix.String())-1)
+		prefix.Reset()
+		prefix.WriteString(string(s))
 	}
-	return results
 }
 
 /**
