@@ -157,7 +157,7 @@ func (t *TrieST) KeysWithPrefix(prefix string) []string {
 	x := get(t.root, prefix, 0)
 	var sb strings.Builder
 	sb.WriteString(prefix)
-	collect(x, sb, results)
+	collect(x, &sb, results)
 	r := make([]string, 0)
 	for !results.IsEmpty() {
 		r = append(r, results.Dequeue())
@@ -165,7 +165,7 @@ func (t *TrieST) KeysWithPrefix(prefix string) []string {
 	return r
 }
 
-func collect(x *node, prefix strings.Builder, results queue.Queue[string]) {
+func collect(x *node, prefix *strings.Builder, results queue.Queue[string]) {
 	if x == nil {
 		return
 	}
@@ -195,7 +195,7 @@ func (t *TrieST) KeysThatMatch(pattern string) []string {
 
 	results := queue.New[string]()
 	var sb strings.Builder
-	collectPattern(t.root, sb, pattern, results)
+	collectPattern(t.root, &sb, pattern, results)
 	r := make([]string, 0)
 	for !results.IsEmpty() {
 		r = append(r, results.Dequeue())
@@ -203,7 +203,7 @@ func (t *TrieST) KeysThatMatch(pattern string) []string {
 	return r
 }
 
-func collectPattern(x *node, prefix strings.Builder, pattern string, results queue.Queue[string]) {
+func collectPattern(x *node, prefix *strings.Builder, pattern string, results queue.Queue[string]) {
 	if x == nil {
 		return
 	}
@@ -243,9 +243,8 @@ func collectPattern(x *node, prefix strings.Builder, pattern string, results que
  * @throws IllegalArgumentException if {@code query} is {@code null}
  */
 func (t *TrieST) LongestPrefixOf(query string) string {
-
 	q := []rune(query)
-	length := longestPrefixOf(r.root, q, 0, -1)
+	length := longestPrefixOf(t.root, q, 0, -1)
 	if length == -1 {
 		return ""
 	} else {
