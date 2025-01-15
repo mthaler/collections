@@ -61,9 +61,9 @@ type TrieST[T any] struct {
  *     and {@code null} if the key is not in the symbol table
  * @throws IllegalArgumentException if {@code key} is {@code null}
  */
-func (t TrieST[T]) Get(key string) any {
+func (t TrieST[T]) Get(key string) T {
 	x := get(t.root, key, 0)
-	return x
+	return *x.value
 }
 
 /**
