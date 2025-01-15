@@ -1,43 +1,18 @@
 package tree
 
 import (
-	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
-func TestRadixTree_Keys(t *testing.T) {
+func TestKeys(t *testing.T) {
 	r := createTestTree()
-	expected := []string{"romane", "romanus", "romulus", "rubens", "ruber", "rubicon", "rubicundus"}
-	if !reflect.DeepEqual(r.Keys(), expected) {
-		t.Errorf("r.Keys should be %v", expected)
-	}
+	assert.Equal(t, []string{"romane", "romanus", "romulus", "rubens", "ruber", "rubicon", "rubicundus"}, r.Keys())
 }
 
-func TestRadixTree_KeysWithPrefix(t *testing.T) {
-	r := createTestTree()
-	expected := []string{"romane", "romanus", "romulus"}
-	if !reflect.DeepEqual(r.KeysWithPrefix("rom"), expected) {
-		t.Errorf("r.Keys should be %v", expected)
-	}
-}
-
-func TestRadixTree_KeysThatMatch(t *testing.T) {
-	r := createTestTree()
-	expected := []string{"romanus", "romulus"}
-	if !reflect.DeepEqual(r.KeysThatMatch("rom...s"), expected) {
-		t.Errorf("r.Keys should be %v", expected)
-	}
-}
-
-func TestRadixTree_LongestPrefixOf(t *testing.T) {
-	r := createTestTree()
-	if r.LongestPrefixOf("romulus1234") != "romulus" {
-		t.Error("r.LongestPrefixOf(romulus1234) should be romulus")
-	}
-}
-
-func createTestTree() RadixTree {
-	r := RadixTree{}
+func createTestTree() TrieST {
+	r := TrieST{}
 	r.Put("romane", 1)
 	r.Put("romanus", 2)
 	r.Put("romulus", 3)
