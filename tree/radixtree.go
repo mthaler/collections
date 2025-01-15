@@ -153,13 +153,16 @@ func (t *TrieST) Keys() []string {
  * @return all keys in the symbol table as an {@code Iterable}
  */
 func (t *TrieST) KeysWithPrefix(prefix string) []string {
-
-	results := queue.New()
+	results := queue.New[string]()
 	x := get(t.root, prefix, 0)
 	var sb strings.Builder
 	sb.WriteString(prefix)
 	collect(x, sb, results)
-	return results
+	r := make([]string, 0)
+	for !results.IsEmpty() {
+		r = append(r, results.Dequeue())
+	}
+	return r
 }
 
 func collect(x *node, prefix strings.Builder, results queue.Queue[string]) {

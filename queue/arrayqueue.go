@@ -47,6 +47,6 @@ func (q ArrayQueue[T]) CreateIterator() collections.Iterator[T] {
 	}
 }
 
-func New[T any]() ArrayQueue[T] {
-	return ArrayQueue[T]{}
+func New[T any]() Queue[T] {
+	return &ArrayQueue[T]{}
 }
