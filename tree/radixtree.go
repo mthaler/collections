@@ -154,8 +154,7 @@ func (t *TrieST) Keys() []string {
  */
 func (t *TrieST) KeysWithPrefix(prefix string) []string {
 
-	results := make([]string, 0)
-
+	results := queue.New()
 	x := get(t.root, prefix, 0)
 	var sb strings.Builder
 	sb.WriteString(prefix)

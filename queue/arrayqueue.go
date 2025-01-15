@@ -25,34 +25,28 @@ func (q *ArrayQueue[T]) Dequeue() T {
 }
 
 type Iterator[T any] struct {
-	items []*T
-	i     int
+	q ArrayQueue[T]
 }
 
 func (it *Iterator[T]) HasNext() bool {
-	return it.items != nil
+	return !it.q.IsEmpty()
 }
 
 func (it *Iterator[T]) Next() T {
-	result := it.items[it.i]
-	it.i++
-	return *result
+	return it.q.Dequeue()
 }
 
-func (q *ArrayQueue[T]) CreateIterator() collections.Iterator[T] {
-	if len(q.items) == 0 {
+func (q ArrayQueue[T]) CreateIterator() collections.Iterator[T] {
+	if q.IsEmpty() {
 		it := Iterator[T]{}
 		return &it
 	} else {
 		var it Iterator[T]
-		for i, v := range q.items {
-			it.items[i] = &v
-		}
+		it.q = q
 		return &it
 	}
 }
 
-func New[T any]() Queue[T] {
-	var q ArrayQueue[T]
-	return &q
+func New[T any]() ArrayQueue[T] {
+	return ArrayQueue[T]{}
 }
