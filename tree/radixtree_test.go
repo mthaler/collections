@@ -17,6 +17,11 @@ func TestKeys(t *testing.T) {
 	assert.Equal(t, []string{"romane", "romanus", "romulus", "rubens", "ruber", "rubicon", "rubicundus"}, r.Keys())
 }
 
+func TestSize(t *testing.T) {
+	r := createTestTree()
+	assert.Equal(t, 7, r.Size())
+}
+
 func createTestTree() TrieST {
 	r := TrieST{}
 	r.Put("romane", 1)
