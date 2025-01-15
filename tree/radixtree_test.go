@@ -22,6 +22,13 @@ func TestSize(t *testing.T) {
 	assert.Equal(t, 7, r.Size())
 }
 
+func TestIsEmpty(t *testing.T) {
+	r := TrieST{}
+	assert.True(t, r.IsEmpty())
+	r2 := createTestTree()
+	assert.False(t, r2.IsEmpty())
+}
+
 func createTestTree() TrieST {
 	r := TrieST{}
 	r.Put("romane", 1)
