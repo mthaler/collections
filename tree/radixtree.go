@@ -6,16 +6,16 @@ import (
 	"unicode/utf8"
 )
 
-type node struct {
-	value *any    // value of the node or nil if there is no value
-	next  []*node // array of pointers to the next node
+type node[T any] struct {
+	value *T         // value of the node or nil if there is no value
+	next  []*node[T] // array of pointers to the next node
 }
 
 const R = 256 // extended ASCII
 
 // Creates a new node structure, initializing the next array
-func createNode() *node {
-	n := node{next: make([]*node, R)}
+func createNode[T any]() *node[T] {
+	n := node[T]{next: make([]*node[T], R)}
 	return &n
 }
 
@@ -49,8 +49,8 @@ func createNode() *node {
  * Ported from Robert Sedgewicks Java code
  */
 type TrieST[T any] struct {
-	root *node // root of trie
-	n    int   // number of keys in trie
+	root *node[T] // root of trie
+	n    int      // number of keys in trie
 
 }
 
@@ -77,7 +77,7 @@ func (t *TrieST[T]) Contains(key string) bool {
 	return get(t.root, key, 0) != nil
 }
 
-func get(x *node, key string, d int) *node {
+func get[T any](x *node[T], key string, d int) *node[T] {
 	if x == nil {
 		return nil
 	}
@@ -99,13 +99,13 @@ func get(x *node, key string, d int) *node {
  * @param val the value
  * @throws IllegalArgumentException if {@code key} is {@code null}
  */
-func (t *TrieST[T]) Put(key string, value any) {
+func (t *TrieST[T]) Put(key string, value T) {
 	t.root = t.put(t.root, key, value, 0)
 }
 
-func (t *TrieST[T]) put(x *node, key string, value any, d int) *node {
+func (t *TrieST[T]) put(x *node[T], key string, value T, d int) *node[T] {
 	if x == nil {
-		x = createNode()
+		x = createNode[T]()
 	}
 	if d == utf8.RuneCountInString(key) {
 		if x.value == nil {
@@ -164,7 +164,7 @@ func (t *TrieST[T]) KeysWithPrefix(prefix string) []string {
 	return r
 }
 
-func collect(x *node, prefix *strings.Builder, results queue.Queue[string]) {
+func collect[T any](x *node[T], prefix *strings.Builder, results queue.Queue[string]) {
 	if x == nil {
 		return
 	}
@@ -202,7 +202,7 @@ func (t *TrieST[T]) KeysThatMatch(pattern string) []string {
 	return r
 }
 
-func collectPattern(x *node, prefix *strings.Builder, pattern string, results queue.Queue[string]) {
+func collectPattern[T any](x *node[T], prefix *strings.Builder, pattern string, results queue.Queue[string]) {
 	if x == nil {
 		return
 	}
@@ -256,7 +256,7 @@ func (t *TrieST[T]) LongestPrefixOf(query string) string {
 // rooted at x that is a prefix of the query string,
 // assuming the first d character match and we have already
 // found a prefix match of given length (-1 if no such match)
-func longestPrefixOf(x *node, query []rune, d int, length int) int {
+func longestPrefixOf[T any](x *node[T], query []rune, d int, length int) int {
 	if x == nil {
 		return length
 	}
@@ -279,7 +279,7 @@ func (t *TrieST[T]) Delete(key string) {
 	t.root = t.delete(t.root, key, 0)
 }
 
-func (t *TrieST[T]) delete(x *node, key string, d int) *node {
+func (t *TrieST[T]) delete(x *node[T], key string, d int) *node[T] {
 	if x == nil {
 		return nil
 	}
