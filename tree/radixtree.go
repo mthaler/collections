@@ -101,9 +101,6 @@ func get(x *node, key string, d int) *node {
  * @throws IllegalArgumentException if {@code key} is {@code null}
  */
 func (t *TrieST) Put(key string, value any) {
-	if value == nil {
-		t.Delete(key)
-	}
 	t.root = t.put(t.root, key, value, 0)
 }
 
@@ -111,7 +108,7 @@ func (t *TrieST) put(x *node, key string, value any, d int) *node {
 	if x == nil {
 		x = createNode()
 	}
-	if d == len(key) {
+	if d == utf8.RuneCountInString(key) {
 		if x.value == nil {
 			t.n++
 		}
@@ -160,8 +157,9 @@ func (t *TrieST) KeysWithPrefix(prefix string) []string {
 	results := make([]string, 0)
 
 	x := get(t.root, prefix, 0)
-	b := []rune(prefix)
-	collect(x, b, results)
+	var sb strings.Builder
+	sb.WriteString(prefix)
+	collect(x, sb, results)
 	return results
 }
 
