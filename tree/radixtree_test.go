@@ -6,6 +6,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestContains(t *testing.T) {
+	r := createTestTree()
+	assert.True(t, r.Contains("romane"))
+	assert.False(t, r.Contains("test"))
+}
+
 func TestKeys(t *testing.T) {
 	r := createTestTree()
 	assert.Equal(t, []string{"romane", "romanus", "romulus", "rubens", "ruber", "rubicon", "rubicundus"}, r.Keys())
