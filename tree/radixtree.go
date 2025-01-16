@@ -1,6 +1,7 @@
 package tree
 
 import (
+	"collections"
 	"collections/queue"
 	"strings"
 	"unicode/utf8"
@@ -197,6 +198,14 @@ func (t *TrieST[T]) KeysThatMatch(pattern string) []string {
 	collectPattern(t.root, &sb, pattern, results)
 	r := make([]string, 0)
 	for !results.IsEmpty() {
+		if q.IsEmpty() {
+			it := Iterator[T]{}
+			return &it
+		} else {
+			var it Iterator[T]
+			it.q = q
+			return &it
+		}
 		r = append(r, results.Dequeue())
 	}
 	return r
@@ -311,4 +320,36 @@ func deleteCharAt(prefix []rune, index int) []rune {
 	} else {
 		return append(prefix[0:index], prefix[index+1:]...)
 	}
+}
+
+type KV[T any] struct {
+	Key   string
+	Value T
+}
+
+type Iterator[T any] struct {
+	q queue.ArrayQueue[T]
+}
+
+func (it *Iterator[T]) HasNext() bool {
+	return !it.q.IsEmpty()
+}
+
+func (it *Iterator[T]) Next() T {
+	return it.q.Dequeue()
+}
+
+func (t TrieST[T]) CreateIterator() collections.Iterator[KV[T]] {
+	var q queue.ArrayQueue[KV[T]]
+	keys := t.Keys()
+	for _, k := range keys {
+		v := t.Get(k)
+		var kv KV[T]
+		kv.Key = k
+		kv.Value = v
+		q.Enqueue(kv)
+	}
+	var it Iterator[KV[T]]
+	it.q = q
+	return &it
 }
