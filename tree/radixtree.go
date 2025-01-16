@@ -198,14 +198,6 @@ func (t *TrieST[T]) KeysThatMatch(pattern string) []string {
 	collectPattern(t.root, &sb, pattern, results)
 	r := make([]string, 0)
 	for !results.IsEmpty() {
-		if q.IsEmpty() {
-			it := Iterator[T]{}
-			return &it
-		} else {
-			var it Iterator[T]
-			it.q = q
-			return &it
-		}
 		r = append(r, results.Dequeue())
 	}
 	return r

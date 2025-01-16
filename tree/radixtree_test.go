@@ -1,6 +1,7 @@
 package tree
 
 import (
+	"collections/util"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -54,6 +55,19 @@ func TestDelete(t *testing.T) {
 	r := createTestTree()
 	r.Delete("romane")
 	assert.Equal(t, 6, r.Size())
+}
+
+func TestToSlice(t *testing.T) {
+	r := createTestTree()
+	keys := make([]string, 0)
+	values := make([]int, 0)
+	result := util.ToSclice[KV[int]](r)
+	for _, kv := range result {
+		keys = append(keys, kv.Key)
+		values = append(values, kv.Value)
+	}
+	assert.Equal(t, []string{"romane", "romanus", "romulus", "rubens", "ruber", "rubicon", "rubicundus"}, keys)
+	assert.Equal(t, []int{1, 2, 3, 4, 5, 6, 7}, values)
 }
 
 func createTestTree() TrieST[int] {
