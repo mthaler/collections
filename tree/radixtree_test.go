@@ -51,6 +51,14 @@ func TestKeysThatMatch(t *testing.T) {
 	assert.Equal(t, []string{"romane"}, r.KeysThatMatch("roman."))
 }
 
+func TestLongestPrefixOf(t *testing.T) {
+	r := TrieST[int]{}
+	r.Put("romane", 1)
+	r.Put("romanus", 2)
+	r.Put("romulus", 3)
+	assert.Equal(t, "rom", r.LongestPrefixOf(""))
+}
+
 func TestDelete(t *testing.T) {
 	r := createTestTree()
 	r.Delete("romane")
