@@ -41,10 +41,21 @@ type In struct {
  * Initializes an input stream from a file.
  *
  * @param  file the file
- * @throws IllegalArgumentException if cannot open {@code file}
- * @throws IllegalArgumentException if {@code file} is {@code null}
  */
 
 func NewFromFile(file *os.File) *In {
 	return &In{scanner: *bufio.NewScanner(file)}
+}
+
+/**
+ * Initializes an input stream from a filename
+ *
+ * @param  name the filename
+ */
+func NewFromFilename(name string) *In {
+	file, err := os.Open(name)
+	if err != nil {
+		panic(err)
+	}
+	return NewFromFile(file)
 }
